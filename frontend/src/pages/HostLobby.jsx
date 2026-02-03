@@ -68,6 +68,19 @@ function HostLobby() {
     });
   };
 
+  const handleLoadAPIQuestions = () => {
+    socketService.loadAPIQuestions(pin, 10, (response) => {
+      if (response.success) {
+        setQuestionsLoaded(true);
+        alert(`${response.questionsCount} API questions loaded!`);
+        // Update questions count
+        setQuestions(Array(response.questionsCount).fill({}));
+      } else {
+        alert('Failed to load API questions. Using pre-made questions instead.');
+      }
+    });
+  };
+
   const handleAddQuestion = () => {
     if (!newQuestion.text || newQuestion.options.some(opt => !opt)) {
       alert('Please fill in all question fields');
@@ -129,12 +142,20 @@ function HostLobby() {
           {/* Quick Load Questions Button */}
           {!questionsLoaded && (
             <div className="mb-6 text-center">
-              <button
-                onClick={handleLoadQuestions}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
-              >
-                🎲 Load 10 Pre-Made Questions
-              </button>
+              <div className="flex gap-4 justify-center">
+                <button
+                  onClick={handleLoadQuestions}
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
+                >
+                  🎲 Load 10 Pre-Made Questions
+                </button>
+                <button
+                  onClick={handleLoadAPIQuestions}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
+                >
+                  🌐 Load 10 API Questions
+                </button>
+              </div>
               <p className="text-sm text-gray-500 mt-2">Or add your own questions below</p>
             </div>
           )}

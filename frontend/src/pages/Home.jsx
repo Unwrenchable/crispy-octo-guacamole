@@ -10,7 +10,8 @@ function Home() {
   const gameModes = [
     { id: 'classic', name: 'Classic Trivia', icon: '🎯', description: 'Traditional quiz with timed questions' },
     { id: 'buzzer', name: 'Buzzer Mode', icon: '⚡', description: 'First to buzz in gets to answer' },
-    { id: 'speed-round', name: 'Speed Round', icon: '⏱️', description: 'Fast-paced quick questions' }
+    { id: 'speed-round', name: 'Speed Round', icon: '⏱️', description: 'Fast-paced quick questions' },
+    { id: 'lightning', name: 'Lightning Round', icon: '⚡', description: 'Ultra-fast 10-second questions!' }
   ];
 
   const genres = [
@@ -61,7 +62,7 @@ function Home() {
 
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Game Mode</label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {gameModes.map(mode => (
                     <button
                       key={mode.id}

@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const https = require('https');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
@@ -24,6 +25,71 @@ const games = new Map();
 // Helper function to generate unique game PIN
 function generateGamePin() {
   return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+// Helper function to fetch questions from Open Trivia DB
+async function fetchOpenTriviaQuestions(amount = 10, category = null, difficulty = null) {
+  return new Promise((resolve, reject) => {
+    let url = `https://opentdb.com/api.php?amount=${amount}&type=multiple`;
+    if (category) url += `&category=${category}`;
+    if (difficulty) url += `&difficulty=${difficulty}`;
+
+    https.get(url, (res) => {
+      let data = '';
+      
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      res.on('end', () => {
+        try {
+          const result = JSON.parse(data);
+          if (result.response_code === 0) {
+            const questions = result.results.map(q => ({
+              text: decodeHTML(q.question),
+              options: shuffleArray([...q.incorrect_answers.map(a => decodeHTML(a)), decodeHTML(q.correct_answer)]),
+              correctAnswer: decodeHTML(q.correct_answer),
+              category: decodeHTML(q.category),
+              difficulty: q.difficulty
+            }));
+            resolve(questions);
+          } else {
+            reject(new Error('Failed to fetch questions from Open Trivia DB'));
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).on('error', (error) => {
+      reject(error);
+    });
+  });
+}
+
+// Helper function to decode HTML entities
+function decodeHTML(html) {
+  const entities = {
+    '&quot;': '"',
+    '&#039;': "'",
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&ldquo;': '"',
+    '&rdquo;': '"',
+    '&rsquo;': "'",
+    '&lsquo;': "'"
+  };
+  return html.replace(/&[#\w]+;/g, entity => entities[entity] || entity);
+}
+
+// Helper function to shuffle array
+function shuffleArray(array) {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
 }
 
 // Pre-loaded question banks by genre
@@ -321,14 +387,49 @@ class Game {
     const shuffled = questionsToUse.sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, Math.min(count, shuffled.length));
     
+    // Set time limits based on game mode
+    let timeLimit = 30; // Default for classic
+    if (this.gameMode === 'speed-round') {
+      timeLimit = 15;
+    } else if (this.gameMode === 'lightning') {
+      timeLimit = 10;
+    }
+    
     selected.forEach(q => {
       this.addQuestion({
         ...q,
-        timeLimit: this.gameMode === 'speed-round' ? 15 : 30
+        timeLimit: timeLimit
       });
     });
 
     return this.questions.length;
+  }
+
+  // Load questions from Open Trivia DB API
+  async loadQuestionsFromAPI(count = 10) {
+    try {
+      const questions = await fetchOpenTriviaQuestions(count);
+      
+      // Set time limits based on game mode
+      let timeLimit = 30; // Default for classic
+      if (this.gameMode === 'speed-round') {
+        timeLimit = 15;
+      } else if (this.gameMode === 'lightning') {
+        timeLimit = 10;
+      }
+      
+      questions.forEach(q => {
+        this.addQuestion({
+          ...q,
+          timeLimit: timeLimit
+        });
+      });
+      
+      return this.questions.length;
+    } catch (error) {
+      console.error('Error loading questions from API:', error);
+      return 0;
+    }
   }
 
   // Buzzer mode methods
@@ -511,6 +612,39 @@ io.on('connection', (socket) => {
       success: true,
       questionsCount: questionsLoaded
     });
+  });
+
+  // Host loads questions from Open Trivia DB API
+  socket.on('host:load-api-questions', async (data, callback) => {
+    const { pin, count = 10 } = data;
+    const game = games.get(pin);
+    
+    if (!game) {
+      return callback({ success: false, error: 'Game not found' });
+    }
+    
+    try {
+      const questionsLoaded = await game.loadQuestionsFromAPI(count);
+      
+      if (questionsLoaded > 0) {
+        console.log(`${questionsLoaded} API questions loaded for game ${pin}`);
+        callback({
+          success: true,
+          questionsCount: questionsLoaded
+        });
+      } else {
+        callback({
+          success: false,
+          error: 'Failed to load questions from API'
+        });
+      }
+    } catch (error) {
+      console.error('Error loading API questions:', error);
+      callback({
+        success: false,
+        error: 'Failed to load questions from API'
+      });
+    }
   });
 
   // Team joins game
