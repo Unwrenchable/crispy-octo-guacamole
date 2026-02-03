@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Laser Engraving File Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ LASER ENGRAVING FILE CONVERTER ⚡</h1>
+            <p class="subtitle">INDUSTRIAL-GRADE CONVERSION SYSTEM | MULTI-FORMAT OUTPUT | ANY DEVICE</p>
+        </header>
+
+        <main>
+            <!-- Upload Section -->
+            <section class="card upload-section">
+                <h2>📁 Upload Your File</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📤</div>
+                    <p class="upload-text">Drag & drop your file here</p>
+                    <p class="upload-subtext">or click to browse</p>
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/bmp,image/tiff,.svg,.dxf,.ai,.eps" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div id="fileInfo" class="file-info" style="display: none;">
+                    <p><strong>Selected:</strong> <span id="fileName"></span></p>
+                    <p><strong>Type:</strong> <span id="fileType"></span></p>
+                </div>
+            </section>
+
+            <!-- Conversion Options -->
+            <section class="card options-section" id="optionsSection" style="display: none;">
+                <h2>⚙️ CONVERSION OPTIONS</h2>
+                
+                <div class="form-group">
+                    <label for="conversionMode">CONVERSION MODE:</label>
+                    <select id="conversionMode" class="form-control">
+                        <option value="multi">ALL FORMATS (RECOMMENDED) - Generates SVG + 3 PNG Resolutions</option>
+                        <option value="single">SINGLE FORMAT - Choose One Output</option>
+                    </select>
+                </div>
+
+                <div id="singleFormatOptions" style="display: none;">
+                    <div class="form-group">
+                        <label for="outputType">OUTPUT FORMAT:</label>
+                        <select id="outputType" class="form-control">
+                            <option value="svg">SVG (Vector - for precise cuts and lines)</option>
+                            <option value="png">PNG (Raster - for photo engraving)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="dpiGroup">
+                        <label for="dpi">DPI (FOR PNG OUTPUT):</label>
+                        <input type="number" id="dpi" class="form-control" value="300" min="100" max="1200" step="100" inputmode="numeric">
+                        <small>RECOMMENDED: 300-600 DPI</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="useCase">USE CASE:</label>
+                    <select id="useCase" class="form-control">
+                        <option value="general">GENERAL PURPOSE</option>
+                        <option value="signage">SIGNAGE</option>
+                        <option value="jewelry">JEWELRY</option>
+                        <option value="personalization">PERSONALIZATION</option>
+                        <option value="photos">PHOTOS</option>
+                        <option value="industrial">INDUSTRIAL</option>
+                        <option value="arts">ARTS & CRAFTS</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success btn-large" id="convertBtn" onclick="convertFile()">
+                    🔥 INITIATE CONVERSION
+                </button>
+            </section>
+
+            <!-- Multi-Format Results Section -->
+            <section class="card results-section" id="multiResultsSection" style="display: none;">
+                <h2>✅ ALL FORMATS GENERATED</h2>
+                
+                <div id="outputsGrid" class="outputs-grid">
+                    <!-- Output cards will be dynamically inserted here -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" id="downloadAllBtn" onclick="downloadAllFiles()">
+                        📦 DOWNLOAD ALL FORMATS (ZIP)
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetForm()">
+                        🔄 CONVERT ANOTHER FILE
+                    </button>
+                </div>
+            </section>
+
+            <!-- Machine Control Section -->
+            <section class="card machine-section" id="machineSection">
+                <h2>🔌 DIRECT MACHINE CONTROL</h2>
+                <p class="machine-subtitle">CONNECT TO YOUR LASER ENGRAVER</p>
+                
+                <div class="machine-controls">
+                    <button class="btn btn-info" id="scanMachinesBtn" onclick="scanForMachines()">
+                        🔍 SCAN FOR MACHINES
+                    </button>
+                    
+                    <div id="machinesList" class="machines-list" style="display: none;">
+                        <!-- Machine cards will be dynamically inserted here -->
+                    </div>
+                    
+                    <div id="connectedMachine" class="connected-machine" style="display: none;">
+                        <div class="machine-status">
+                            <div class="status-indicator" id="statusIndicator"></div>
+                            <span id="machineStatusText">IDLE</span>
+                        </div>
+                        
+                        <div class="machine-info">
+                            <p><strong>Connected:</strong> <span id="connectedMachineName"></span></p>
+                            <p><strong>Port:</strong> <span id="connectedMachinePort"></span></p>
+                        </div>
+                        
+                        <div class="send-to-machine" id="sendToMachineSection" style="display: none;">
+                            <h3>⚡ SEND TO MACHINE</h3>
+                            <p class="warning-text">⚠️ Ensure machine is ready and materials are secured!</p>
+                            
+                            <div class="machine-settings">
+                                <div class="form-group-inline">
+                                    <label for="laserPower">POWER (0-1000):</label>
+                                    <input type="number" id="laserPower" class="form-control-small" value="800" min="0" max="1000" inputmode="numeric">
+                                </div>
+                                
+                                <div class="form-group-inline">
+                                    <label for="laserSpeed">SPEED (mm/min):</label>
+                                    <input type="number" id="laserSpeed" class="form-control-small" value="1000" min="100" max="5000" step="100" inputmode="numeric">
+                                </div>
+                                
+                                <div class="form-group-inline">
+                                    <label for="workWidth">WORK AREA WIDTH (mm):</label>
+                                    <input type="number" id="workWidth" class="form-control-small" value="300" min="50" max="1000" inputmode="numeric">
+                                </div>
+                                
+                                <div class="form-group-inline">
+                                    <label for="workHeight">WORK AREA HEIGHT (mm):</label>
+                                    <input type="number" id="workHeight" class="form-control-small" value="200" min="50" max="1000" inputmode="numeric">
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-success btn-large" id="sendToMachineBtn" onclick="sendToMachine()">
+                                ⚡ ENGRAVE NOW
+                            </button>
+                            
+                            <div class="control-buttons" id="controlButtons" style="display: none;">
+                                <button class="btn btn-warning" onclick="controlMachine('pause')">⏸️ PAUSE</button>
+                                <button class="btn btn-info" onclick="controlMachine('resume')">▶️ RESUME</button>
+                                <button class="btn btn-secondary" onclick="controlMachine('stop')">⏹️ STOP</button>
+                                <button class="btn btn-danger" onclick="controlMachine('emergency_stop')">🛑 EMERGENCY STOP</button>
+                            </div>
+                        </div>
+                        
+                        <div class="machine-actions">
+                            <button class="btn btn-secondary" onclick="disconnectMachine()">
+                                ❌ DISCONNECT
+                            </button>
+                            <button class="btn btn-info" onclick="controlMachine('home')">
+                                🏠 HOME MACHINE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                        <option value="signage">Signage</option>
+                        <option value="jewelry">Jewelry</option>
+                        <option value="personalization">Personalization</option>
+                        <option value="photos">Photos</option>
+                        <option value="industrial">Industrial</option>
+                        <option value="arts">Arts & Crafts</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="dpiGroup">
+                    <label for="dpi">DPI (for PNG output):</label>
+                    <input type="number" id="dpi" class="form-control" value="300" min="100" max="1200" step="100">
+                    <small>Recommended: 300-600 DPI</small>
+                </div>
+
+                <div class="form-group" id="thresholdGroup" style="display: none;">
+                    <label for="threshold">Tracing Threshold:</label>
+                    <input type="range" id="threshold" class="form-control-range" value="128" min="0" max="255">
+                    <small>Adjust for better black/white conversion (0-255)</small>
+                </div>
+
+                <button class="btn btn-success btn-large" id="convertBtn" onclick="convertFile()">
+                    🚀 Convert File
+                </button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="card results-section" id="resultsSection" style="display: none;">
+                <h2>✅ Conversion Complete!</h2>
+                
+                <div class="result-info">
+                    <p><strong>Output File:</strong> <span id="outputFileName"></span></p>
+                    <p><strong>File Size:</strong> <span id="fileSize"></span></p>
+                    <p><strong>Format:</strong> Clean, scalable, ready for any device</p>
+                    <p class="material-suggestion">
+                        <strong>💡 Material Suggestion:</strong><br>
+                        <span id="materialSuggestion"></span>
+                    </p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" id="downloadBtn" onclick="downloadFile()">
+                        ⬇️ Download to Your Downloads Folder
+                    </button>
+                    <p class="download-note">File will be saved to your device's Downloads folder</p>
+                    <button class="btn btn-secondary" onclick="resetForm()">
+                        🔄 Convert Another File
+                    </button>
+                </div>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Converting your file...</p>
+            </div>
+
+            <!-- Best Practices Section -->
+            <section class="card best-practices-section">
+                <h2>📚 Best Practices for Laser Engraving</h2>
+                <button class="btn btn-info" onclick="toggleBestPractices()">
+                    Show Best Practices
+                </button>
+                <div id="bestPracticesList" style="display: none;">
+                    <ul id="practicesList" class="practices-list">
+                        <!-- Populated by JavaScript -->
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>💻 Unified Laser Engraving File Converter | Web + CLI | Works on any device</p>
+            <p><small>Supports: SVG, DXF, AI, EPS, PNG, JPG, BMP, TIFF</small></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
