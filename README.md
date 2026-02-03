@@ -116,20 +116,6 @@ A real-time multiplayer game platform perfect for bar game nights, built with Re
    - View your ranking on the leaderboard
    - Compete for the top spot!
 
-1. **Join a Game**
-   - Enter the 4-digit PIN from your host
-   - Choose your team name
-
-2. **Answer Questions**
-   - Read the question on your phone
-   - Select your answer quickly (speed bonus!)
-   - Wait for the host to reveal the answer
-
-3. **Track Your Progress**
-   - See your current score
-   - View rankings after each question
-   - Celebrate your victory at the end!
-
 ## 📱 Progressive Web App (PWA)
 
 This app works as a PWA, meaning:
