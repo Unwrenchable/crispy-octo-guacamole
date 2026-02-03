@@ -1,18 +1,40 @@
-# 🎮 Bar Trivia - Multiplayer Quiz Platform
+# 🎮 Bar Games Night - Multiplayer Game Platform
 
-A real-time multiplayer trivia quiz platform perfect for bar game nights, built with React, Node.js, and Socket.io.
+A real-time multiplayer game platform perfect for bar game nights, built with React, Node.js, and Socket.io. Features multiple game modes, genres, and themes - your phone is your gamepad!
 
 ## ✨ Features
 
-- **Real-time multiplayer gameplay** using Socket.io
-- **Team-based competition** instead of individual players
+### 🎯 Multiple Game Modes
+- **Classic Trivia** - Traditional quiz with timed questions and multiple choice
+- **Buzzer Mode** - First to buzz in gets to answer (game show style)
+- **Speed Round** - Fast-paced quick questions with reduced time limits
+
+### 🎲 Multiple Genres & Themes
+- **Mixed** - Questions from all categories
+- **Sports** ⚽ - Basketball, football, tennis, and more
+- **Movies** 🎬 - Film trivia and cinema knowledge
+- **Music** 🎵 - Artists, albums, and music history
+- **Science** 🔬 - Chemistry, physics, and biology
+- **History** 📜 - World events and historical figures
+- **Geography** 🌍 - Countries, capitals, and landmarks
+- **Pop Culture** 📱 - Social media, trends, and entertainment
+- **Food & Drink** 🍔 - Culinary knowledge and beverages
+
+### 📱 Phone-as-Gamepad
+- **No Bluetooth needed** - Pure web-based, works on any device
+- **QR Code joining** for instant access
+- **Mobile-optimized** interface
+- **Real-time updates** via WebSocket
+
+### 🎪 Additional Features
+- **Pre-loaded question banks** - 40+ questions across 8 genres
+- **Custom questions** - Add your own questions
+- **Team-based competition**
 - **Host Dashboard** for TV/projector display
-- **Mobile-friendly player interface** 
-- **Progressive Web App (PWA)** - add to home screen for app-like experience
-- **QR Code joining** for easy game access
 - **Live leaderboards** with real-time scoring
-- **Timed questions** with bonus points for speed
-- **In-memory game state** (no database needed for MVP)
+- **Time bonuses** for quick answers
+- **Progressive Web App (PWA)** support
+- **In-memory game state** (no database needed)
 - **Completely free** to host and deploy
 
 ## 🚀 Quick Start
@@ -55,27 +77,44 @@ A real-time multiplayer trivia quiz platform perfect for bar game nights, built 
 ### For Hosts:
 
 1. **Create a Game**
-   - Enter your name and click "Create Game"
-   - You'll get a unique 4-digit PIN and QR code
+   - Enter your name
+   - Select a game mode (Classic, Buzzer, or Speed Round)
+   - Choose a genre/theme (or Mixed for variety)
+   - Click "Create Game"
 
-2. **Add Questions**
-   - Click "+ Add Question"
-   - Enter question text, 4 answer options, and select the correct answer
-   - Set time limit and category
+2. **Set Up Questions**
+   - **Easy way**: Click "Load 10 Pre-Made Questions" for instant setup
+   - **Custom way**: Add your own questions manually
+   - You'll get a unique 4-digit PIN and QR code
 
 3. **Wait for Teams**
    - Share the PIN or QR code with players
-   - Watch as teams join the lobby
+   - Watch as teams join the lobby on their phones
 
 4. **Start the Game**
    - Click "Start Game" when ready
    - Control the game flow:
-     - Show questions to players
+     - Questions appear on host screen and player phones
      - Reveal answers when time is up
-     - Progress through all questions
-     - View final leaderboard
+     - View live leaderboard after each question
+     - Progress to final results
 
 ### For Players:
+
+1. **Join a Game**
+   - Scan QR code OR enter the 4-digit PIN
+   - Choose your team name
+   - Your phone is now your gamepad!
+
+2. **Play the Game**
+   - **Classic Mode**: Select your answer before time runs out
+   - **Buzzer Mode**: Hit the buzzer when you know the answer
+   - **Speed Round**: Answer quickly for maximum points
+
+3. **Track Your Score**
+   - See if you're correct after each question
+   - View your ranking on the leaderboard
+   - Compete for the top spot!
 
 1. **Join a Game**
    - Enter the 4-digit PIN from your host
