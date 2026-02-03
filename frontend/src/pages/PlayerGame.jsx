@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import socketService from '../services/socket';
+import storageService from '../services/storage';
 
 function PlayerGame() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, teamId, teamName } = location.state || {};
+  const { pin, teamId, teamName, gameMode, genre } = location.state || {};
   
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -15,6 +16,7 @@ function PlayerGame() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [gameEnded, setGameEnded] = useState(false);
   const [myScore, setMyScore] = useState(0);
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
 
   useEffect(() => {
     if (!pin || !teamId) {
@@ -58,23 +60,44 @@ function PlayerGame() {
       setGameEnded(true);
       setLeaderboard(data.finalLeaderboard);
       
-      // Find my score
+      // Find my score and rank
       const myTeam = data.finalLeaderboard.find(team => team.name === teamName);
       if (myTeam) {
         setMyScore(myTeam.score);
+        
+        // Save game to history
+        const myRank = data.finalLeaderboard.findIndex(team => team.name === teamName) + 1;
+        storageService.addGameToHistory({
+          teamName,
+          score: myTeam.score,
+          rank: myRank,
+          totalTeams: data.finalLeaderboard.length,
+          questionsAnswered: questionsAnswered,
+          gameMode: gameMode || 'classic',
+          genre: genre || 'mixed'
+        });
+        
+        // Update persistent leaderboard
+        storageService.updatePersistentLeaderboard(
+          teamName,
+          myTeam.score,
+          gameMode || 'classic',
+          genre || 'mixed'
+        );
       }
     });
 
     return () => {
       socket.disconnect();
     };
-  }, [pin, teamId, teamName, navigate]);
+  }, [pin, teamId, teamName, gameMode, genre, questionsAnswered, navigate]);
 
   const handleSubmitAnswer = (answerIndex) => {
     if (hasAnswered) return;
 
     setSelectedAnswer(answerIndex);
     setHasAnswered(true);
+    setQuestionsAnswered(prev => prev + 1);
 
     socketService.submitAnswer(pin, teamId, answerIndex, (response) => {
       if (!response.success) {

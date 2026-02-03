@@ -130,7 +130,16 @@ function Home() {
             </div>
           </div>
 
-          <div className="mt-8 text-center text-sm text-gray-500">
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => navigate('/stats')}
+              className="text-purple-600 hover:text-purple-700 font-semibold underline"
+            >
+              📊 View Your Stats & History
+            </button>
+          </div>
+
+          <div className="mt-4 text-center text-sm text-gray-500">
             <p>Perfect for bars, pubs, and game nights!</p>
             <p className="mt-1">Your phone is your gamepad - no Bluetooth needed! 📱</p>
           </div>
