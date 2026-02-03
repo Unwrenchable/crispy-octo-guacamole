@@ -1,432 +1,315 @@
-# 🎮 Improved Enigma - Multi-Purpose Platform
+# 🎮 Bar Games Night - Multiplayer Game Platform
 
-This repository contains **TWO APPLICATIONS**:
+A real-time multiplayer game platform perfect for bar game nights, built with React, Node.js, and Socket.io. Features multiple game modes, genres, and themes - your phone is your gamepad!
 
-## 1. 🎮 Bar Trivia - Multiplayer Quiz Platform (NEW!)
+## ✨ Features
 
-A real-time multiplayer trivia quiz platform perfect for bars, pubs, and game nights!
+### 🎯 Multiple Game Modes
+- **Classic Trivia** - Traditional quiz with timed questions and multiple choice
+- **Buzzer Mode** - First to buzz in gets to answer (game show style)
+- **Speed Round** - Fast-paced quick questions with reduced time limits
 
-**[📖 Read the complete Trivia Platform Guide →](README_TRIVIA.md)**
+### 🎲 Multiple Genres & Themes
+- **Mixed** - Questions from all categories
+- **Sports** ⚽ - Basketball, football, tennis, and more
+- **Movies** 🎬 - Film trivia and cinema knowledge
+- **Music** 🎵 - Artists, albums, and music history
+- **Science** 🔬 - Chemistry, physics, and biology
+- **History** 📜 - World events and historical figures
+- **Geography** 🌍 - Countries, capitals, and landmarks
+- **Pop Culture** 📱 - Social media, trends, and entertainment
+- **Food & Drink** 🍔 - Culinary knowledge and beverages
 
-### Features
-- **Real-time multiplayer gameplay** using Socket.io
-- **Team-based competition** 
-- **QR Code joining** for easy access
+### 📱 Phone-as-Gamepad
+- **No Bluetooth needed** - Pure web-based, works on any device
+- **QR Code joining** for instant access
+- **Mobile-optimized** interface
+- **Real-time updates** via WebSocket
+
+### 🎪 Additional Features
+- **Pre-loaded question banks** - 40+ questions across 8 genres
+- **Custom questions** - Add your own questions
+- **Team-based competition**
+- **Host Dashboard** for TV/projector display
+- **Live leaderboards** with real-time scoring
+- **Time bonuses** for quick answers
 - **Progressive Web App (PWA)** support
-- **Host dashboard** optimized for TV/projector
-- **Mobile-friendly** player interface
+- **In-memory game state** (no database needed)
+- **Completely free** to host and deploy
 
-### Quick Start
-```bash
-# Start both backend and frontend
-./start-trivia.sh        # Linux/Mac
-start-trivia.bat         # Windows
-
-# Or manually:
-cd backend && npm install && npm start    # Port 3001
-cd frontend && npm install && npm run dev  # Port 5173
-```
-
-### Screenshots
-
-**Home Page:**
-
-![Home Page](https://github.com/user-attachments/assets/fe2323ed-cedd-439f-9396-fd53a3694f40)
-
-**Host Lobby with QR Code:**
-
-![Host Lobby](https://github.com/user-attachments/assets/fef69749-a158-4d32-87b1-725cf8ba2654)
-
-**Player Join:**
-
-![Player Join](https://github.com/user-attachments/assets/2aa08f20-3b9c-441b-96f7-d6a74ffab13b)
-
----
-
-## 2. 🔥 Laser Engraving File Converter (Original)
-
-# 🔥 ALL-IN-ONE Laser Engraving Application
-
-**Convert files AND engrave directly - complete laser engraving solution with direct machine control!**
-
-A comprehensive tool for converting multiple file formats to scalable, high-definition files suitable for laser engraving, with intelligent material suggestions AND **direct machine control** - send G-code straight to your connected engraver!
-
-**✨ NEW: Direct Machine Control! Connect to your laser engraver via USB/Serial and engrave with one click!**
-
-![Web Interface](https://github.com/user-attachments/assets/c35bab72-f733-4378-a1fd-bb6ca9bc4e24)
-
-## 🎯 What Makes This Special
-
-This is a **TRUE ALL-IN-ONE APPLICATION** that eliminates the need for multiple programs:
-
-### Before (Traditional Workflow)
-1. Convert file in one program
-2. Download converted file
-3. Open LightBurn/LaserGRBL
-4. Import file
-5. Connect to machine
-6. Send to machine
-
-### Now (All-in-One Workflow)
-1. **Upload file** to web interface
-2. **Convert** with one click
-3. **Click "Engrave Now"** - Done! ✨
-
-## 🚀 Key Features
-
-### 🎨 File Conversion
-- **Multiple Input Formats**: SVG, DXF, AI, EPS, PNG, JPG, BMP, TIFF
-- **High-Quality Output**: SVG for precise vector work or high-resolution PNG (300+ DPI)
-- **Multi-Format Mode**: Generate all recommended formats at once (SVG + PNG at 300/600/1200 DPI)
-- **Material Suggestions**: Research-backed material recommendations
-- **Best Practices**: Built-in guidelines for successful laser engraving
-
-### 🔌 **Direct Machine Control** ⭐ NEW!
-- **Auto-Detection**: Automatically finds USB/Serial AND Bluetooth laser engravers
-- **Bluetooth Support**: YES! Wireless control of Bluetooth-enabled engravers (xTool, LaserPecker, NEJE, etc.)
-- **One-Click Connect**: Connect to your machine instantly (wired or wireless)
-- **G-code Generation**: Converts files to machine-ready G-code
-- **Direct Sending**: Streams G-code directly to your engraver
-- **Real-time Control**: Start, stop, pause, resume operations
-- **Status Monitoring**: Live machine status updates
-- **Emergency Stop**: Safety controls always available
-
-### 🖥️ Multi-Platform Access
-- **Web Interface**: Modern, responsive UI - use from any device
-- **Command Line**: Full CLI for advanced users and automation
-- **Standalone Executable**: Create .exe to share with friends (no Python needed)
-- **Network Access**: Use from phone, tablet, or any device on your network
-
-### 🔒 Privacy & Security
-- **All Local Processing**: No cloud uploads, everything stays on your machine
-- **Machine Safety**: Emergency stop, pause controls, warnings
-- **Secure Communication**: Direct serial connection to your engraver
-
-## Installation
+## 🚀 Quick Start
 
 ### Prerequisites
 
-1. **Python 3.7+**: Make sure Python is installed on your system
-2. **ImageMagick** (optional): Required for AI/EPS file conversion
-   - Ubuntu/Debian: `sudo apt-get install imagemagick`
-   - macOS: `brew install imagemagick`
-   - Windows: Download from [imagemagick.org](https://imagemagick.org/script/download.php)
+- Node.js 16+ installed
+- npm or yarn package manager
 
-### Install Dependencies
+### Local Development
 
-```bash
-pip install -r requirements.txt
-```
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd improved-enigma
+   ```
 
-**Key dependencies:**
-- `Pillow` - Image processing
-- `svgwrite` - SVG creation
-- `Flask` - Web interface
-- `pyserial` - Machine control (USB/Serial)
-- `pybluez` - Bluetooth support (optional - only needed for Bluetooth engravers)
-- `pyinstaller` - Create executables
+2. **Start the backend server**
+   ```bash
+   cd backend
+   npm install
+   npm start
+   ```
+   Backend runs on `http://localhost:3001`
 
-**Optional Bluetooth Setup:**
-If you have Bluetooth laser engravers (xTool M1, LaserPecker, NEJE, etc.):
-```bash
-pip install pybluez
-```
+3. **Start the frontend** (in a new terminal)
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Frontend runs on `http://localhost:5173`
 
-See [BLUETOOTH_GUIDE.md](BLUETOOTH_GUIDE.md) for detailed Bluetooth setup instructions.
+4. **Open your browser**
+   - Host: Go to `http://localhost:5173` and create a game
+   - Players: Go to `http://localhost:5173/join` or scan QR code
 
-## 🚀 Quick Start - All-in-One Workflow
+## 🎯 How to Play
 
-### Convert & Engrave in 3 Steps:
+### For Hosts:
 
-**Step 1: Start the web interface**
-```bash
-python web_app.py
-# Open: http://localhost:5000
-```
+1. **Create a Game**
+   - Enter your name
+   - Select a game mode (Classic, Buzzer, or Speed Round)
+   - Choose a genre/theme (or Mixed for variety)
+   - Click "Create Game"
 
-**Step 2: Convert your file**
-1. Drag & drop your file (SVG, PNG, JPG, etc.)
-2. Choose output format and use case
-3. Click "🔥 INITIATE CONVERSION"
+2. **Set Up Questions**
+   - **Easy way**: Click "Load 10 Pre-Made Questions" for instant setup
+   - **Custom way**: Add your own questions manually
+   - You'll get a unique 4-digit PIN and QR code
 
-**Step 3: Engrave directly**
-1. Click "🔍 SCAN FOR MACHINES"
-2. Connect to your engraver
-3. Adjust power/speed settings
-4. Click "⚡ ENGRAVE NOW"
+3. **Wait for Teams**
+   - Share the PIN or QR code with players
+   - Watch as teams join the lobby on their phones
 
-That's it! Your file is converted and engraving automatically. No need to switch between programs!
+4. **Start the Game**
+   - Click "Start Game" when ready
+   - Control the game flow:
+     - Questions appear on host screen and player phones
+     - Reveal answers when time is up
+     - View live leaderboard after each question
+     - Progress to final results
 
-### Just Convert (No Machine)
+### For Players:
 
-If you only want to convert files:
+1. **Join a Game**
+   - Scan QR code OR enter the 4-digit PIN
+   - Choose your team name
+   - Your phone is now your gamepad!
 
-**Web Interface:**
-```bash
-python web_app.py
-```
-Convert files through the browser, download results.
+2. **Play the Game**
+   - **Classic Mode**: Select your answer before time runs out
+   - **Buzzer Mode**: Hit the buzzer when you know the answer
+   - **Speed Round**: Answer quickly for maximum points
 
-**Command Line:**
-```bash
-python laser_converter.py photo.jpg --output-type svg --use-case photos
-```
+3. **Track Your Score**
+   - See if you're correct after each question
+   - View your ranking on the leaderboard
+   - Compete for the top spot!
 
-### Share with Friends
+## 📱 Progressive Web App (PWA)
 
-Create a standalone executable:
-```bash
-python build_exe.py
-# Creates: dist/LaserConverter.exe
-# Share the .exe - no Python needed!
-```
+This app works as a PWA, meaning:
+- Players can "Add to Home Screen" on their phones
+- Works offline after first load
+- App-like experience without app store downloads
+- Fast loading and smooth performance
 
-```bash
-pip install -r requirements.txt
-```
+### How to Add to Home Screen:
 
-## 🌟 Access Methods
+**iOS (Safari):**
+1. Tap the Share button
+2. Scroll and tap "Add to Home Screen"
+3. Tap "Add"
 
-Choose your preferred way to use the converter:
+**Android (Chrome):**
+1. Tap the menu (⋮)
+2. Tap "Add to Home screen"
+3. Tap "Add"
 
-### 1. 🌐 Web Interface with Machine Control (Recommended)
-- **Beautiful modern UI** with drag-and-drop upload
-- **Works on any device** - desktop, tablet, phone
-- **Direct machine control** - connect and engrave with one click
-- **Real-time conversion** with material suggestions
-- **Machine detection** - automatically finds connected engravers
-- **Live status monitoring** - see what your machine is doing
-- **Access from anywhere** on your network
+## 🏗️ Architecture
 
-**Quick Start:**
-```bash
-python web_app.py
-# Then open: http://localhost:5000
-```
+### Tech Stack
 
-Or use the easy launchers:
-- Windows: Double-click `start_web.bat`
-- Mac/Linux: Double-click `start_web.sh`
+**Frontend:**
+- React 18 with Vite
+- React Router for navigation
+- Socket.io Client for real-time communication
+- Tailwind CSS for styling
+- QR Code generation for easy joining
+- Vite PWA Plugin for Progressive Web App functionality
 
-[📖 Read the complete Web Interface Guide →](WEB_GUIDE.md)
-[🔌 Read the Machine Control Guide →](MACHINE_CONTROL_GUIDE.md)
+**Backend:**
+- Node.js with Express
+- Socket.io for WebSocket connections
+- UUID for game/team identification
+- In-memory game state (Map structure)
 
-### 2. 💻 Command Line Interface
-- Full CLI functionality for advanced users
-- Perfect for batch processing and automation
-- Integration with scripts and workflows
-
-[📖 Read the CLI Usage Guide →](USAGE.md)
-
-### 3. 📦 Standalone Executable
-- Create a `.exe` file to share with friends
-- No Python installation required
-- Just double-click and run!
-
-```bash
-python build_exe.py
-# Creates: dist/LaserConverter.exe
-```
-
-## 🔌 Supported Machines
-
-The machine control feature works with:
-
-**USB/Serial Engravers:**
-- ✅ **GRBL-based engravers** (K40, NEJE, Ortur, EleksMaker, generic CNC)
-- ✅ **Marlin firmware** (3D printers with laser attachments)
-- ✅ **Smoothieware** (Smoothieboard-based systems)
-- ✅ **USB/Serial connections** (CH340, FTDI, Arduino)
-
-**Bluetooth Engravers:** 🔵 NEW!
-- ✅ **xTool M1** - Bluetooth + USB + WiFi
-- ✅ **LaserPecker series** (L1, L2, LP3, LP4) - Primary Bluetooth
-- ✅ **NEJE Master 2S Plus** - Bluetooth capable
-- ✅ **AtomStack** (select models) - Bluetooth enabled
-- ✅ **Ortur Laser Master 3** - Bluetooth support
-- ✅ **Portable/mini engravers** - Many support Bluetooth
-
-**See [BLUETOOTH_GUIDE.md](BLUETOOTH_GUIDE.md) for complete Bluetooth setup and usage.**
-
-## 📋 Complete Feature List
-
-### File Conversion
-- Vector formats: SVG, DXF, AI, EPS
-- Raster formats: PNG, JPG, BMP, TIFF
-- Multi-format output (all formats at once)
-- Custom DPI settings (100-1200)
-- Material suggestions by use case
-- Best practices guide
-
-### Machine Control ⭐ NEW
-- Automatic device detection (USB/Serial AND Bluetooth)
-- Bluetooth wireless connection (xTool, LaserPecker, NEJE, etc.)
-- One-click connection
-- G-code generation from files
-- Direct streaming to machine
-- Real-time status monitoring
-- Operation controls (start/stop/pause/resume)
-- Emergency stop button
-- Home machine command
-- Custom power/speed settings
-- Work area configuration
-
-### User Interface
-- Modern industrial-themed web UI
-- Drag-and-drop file upload
-- Mobile responsive design
-- Real-time conversion progress
-- Download to Downloads folder
-- Machine status indicators
-- Multi-language G-code support
-
-## Usage
-
-### Basic Examples
-
-Convert a JPG to SVG for vector engraving:
-```bash
-python laser_converter.py photo.jpg --output-type svg --use-case photos
-```
-
-Convert a DXF design to high-resolution PNG:
-```bash
-python laser_converter.py design.dxf --output-type png --dpi 600
-```
-
-Process multiple files for signage:
-```bash
-python laser_converter.py logo.png design.svg --output-type svg --use-case signage
-```
-
-### Command-Line Options
+### Project Structure
 
 ```
-positional arguments:
-  input_files           Input file path(s) - supports SVG, DXF, AI, EPS, PNG, JPG, BMP, TIFF
-
-optional arguments:
-  -h, --help            Show help message and exit
-  --output-type {svg,png}
-                        Output format: svg (vector) or png (raster) - default: svg
-  --use-case USE_CASE   Use case for material suggestions - default: general
-  --dpi DPI             DPI for PNG output (minimum 300 recommended) - default: 300
-  --threshold THRESHOLD
-                        Threshold for raster-to-vector tracing (0-255) - default: 128
-  --best-practices      Show best practices for laser engraving
+improved-enigma/
+├── backend/
+│   ├── server.js           # Main server with Socket.io
+│   ├── package.json        # Backend dependencies
+│   └── render.yaml         # Render.com deployment config
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Home.jsx           # Landing page
+│   │   │   ├── HostLobby.jsx      # Host game setup
+│   │   │   ├── HostGame.jsx       # Host game control
+│   │   │   ├── PlayerJoin.jsx     # Player join page
+│   │   │   └── PlayerGame.jsx     # Player game view
+│   │   ├── services/
+│   │   │   └── socket.js          # Socket.io service
+│   │   ├── App.jsx                # Main app with routing
+│   │   └── index.css              # Global styles
+│   ├── package.json               # Frontend dependencies
+│   ├── vite.config.js             # Vite + PWA config
+│   └── vercel.json                # Vercel deployment config
+│
+└── README_TRIVIA.md               # This file
 ```
 
-### Use Cases
+## 🚢 Deployment
 
-The program provides material suggestions for these use cases:
-- `signage` - Signs, displays, wayfinding
-- `jewelry` - Earrings, pendants, accessories
-- `personalization` - Custom gifts, names, dates
-- `photos` - Photo engraving, portraits
-- `general` - All-purpose engraving
-- `industrial` - Part marking, labels
-- `arts` - Artistic projects, decorative items
+### Backend (Render.com - Free)
 
-## Output Formats
+1. **Create Render account** at [render.com](https://render.com)
 
-### SVG (Vector)
-- **Best for**: Precise lines, cuts, and shapes
-- **Advantages**: Infinitely scalable, small file size, clean cuts
-- **Recommended for**: Logos, text, geometric designs
-- **Materials**: Wood, acrylic, leather, anodized aluminum
+2. **Create New Web Service**
+   - Connect your GitHub repository
+   - Select `backend` directory
+   - Use these settings:
+     - Build Command: `npm install`
+     - Start Command: `npm start`
+     - Add environment variable: `CLIENT_URL` = your frontend URL
 
-### PNG (Raster)
-- **Best for**: Photo engraving, shading, gradients
-- **Advantages**: Supports grayscale, detailed images
-- **Recommended for**: Photographs, complex artwork with shading
-- **Materials**: Wood, slate, ceramic, leather
+3. **Get your backend URL** (e.g., `https://your-app.onrender.com`)
 
-## Material Recommendations
+### Frontend (Vercel - Free)
 
-The program provides intelligent material suggestions based on your output format and use case. Examples:
+1. **Create Vercel account** at [vercel.com](https://vercel.com)
 
-| Use Case | SVG Output | PNG Output |
-|----------|------------|------------|
-| Signage | Acrylic or plywood | Wood or MDF |
-| Photos | Not ideal (use PNG) | Wood, slate, or ceramic |
-| Jewelry | Anodized aluminum | Not recommended (use SVG) |
-| Personalization | Leather or wood | Slate or leather |
+2. **Import your repository**
+   - Select `frontend` directory
+   - Framework Preset: Vite
+   - Add environment variable:
+     - `VITE_SOCKET_URL` = your backend URL from Render
 
-## Best Practices
+3. **Deploy!**
+   - Vercel will auto-deploy on every push
+   - Get your frontend URL (e.g., `https://your-app.vercel.app`)
 
-Run with `--best-practices` flag to see complete guidelines. Key points:
+4. **Update backend CLIENT_URL**
+   - Go back to Render
+   - Update `CLIENT_URL` environment variable to your Vercel URL
+   - Redeploy backend
 
-1. **Resolution**: Use 300+ DPI for raster images (600 DPI for fine detail)
-2. **Scale**: Work at 1:1 scale in your design
-3. **Testing**: ALWAYS test on scrap material first
-4. **Safety**: Never use PVC (releases toxic chlorine gas when cut)
-5. **Vectors**: Remove overlapping paths to prevent double-cutting
-6. **Materials**: Start with basswood - forgiving and affordable
+### Alternative: Deploy Both on Render
 
-## Technical Details
+You can also deploy both backend and frontend on Render.com's free tier.
 
-### File Conversions
+## 🎨 Customization
 
-- **DXF → SVG**: Converts lines, circles, and arcs using ezdxf
-- **AI/EPS → SVG**: Uses ImageMagick via Wand library
-- **Raster → SVG**: Simple threshold-based tracing (consider Potrace for production)
-- **SVG → PNG**: High-DPI rasterization using cairosvg
-- **Raster → PNG**: DPI optimization and format standardization
+### Adding More Questions
 
-### Dependencies
+Currently, hosts add questions manually. You can integrate the Open Trivia DB API:
 
-- **Pillow**: Image processing and raster handling
-- **svgwrite**: SVG creation and editing
-- **cairosvg**: SVG to PNG conversion
-- **ezdxf**: DXF file parsing and conversion
-- **Wand**: AI/EPS handling (requires ImageMagick)
+```javascript
+// Example: Fetch questions from Open Trivia DB
+const response = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
+const data = await response.json();
+```
 
-## Limitations & Notes
+### Changing Scoring
 
-1. **Raster-to-Vector Tracing**: The built-in tracing is basic. For production work, use dedicated tools like:
-   - Potrace: Command-line bitmap tracing
-   - Inkscape: GUI with trace bitmap feature
-   - Adobe Illustrator: Image Trace feature
+Edit the scoring logic in `backend/server.js`:
 
-2. **AI/EPS Files**: Require ImageMagick installed separately
+```javascript
+submitAnswer(teamId, answer) {
+  // Current: 100 points + 50 time bonus
+  // Customize here!
+  let points = 0;
+  if (isCorrect) {
+    points = 100;
+    const timeBonus = Math.max(0, Math.floor(50 * (1 - answerTime / (question.timeLimit * 1000))));
+    points += timeBonus;
+  }
+  // ...
+}
+```
 
-3. **Large Files**: Very large raster images may create huge SVG files when traced
+### Styling
 
-4. **Complex Vectors**: DXF conversion supports basic entities (lines, circles, arcs). Complex curves may need manual review.
+The app uses Tailwind CSS. Modify colors and styles in:
+- Individual component files (`.jsx` files in `frontend/src/pages/`)
+- Tailwind config: `frontend/tailwind.config.js`
+- Global styles: `frontend/src/index.css`
 
-## Workflow Integration
+## 🐛 Troubleshooting
 
-This tool prepares files for laser engraving software:
-1. Convert and optimize files with this tool
-2. Import results into laser control software:
-   - **LightBurn** (recommended)
-   - **Inkscape** (free, open source)
-   - **LaserGRBL** (for GRBL-based systems)
-3. Adjust laser settings (power, speed, passes)
-4. Test on scrap material
-5. Engrave final piece
+### Players can't connect to the game
 
-## Research & References
+- Check that backend is running and accessible
+- Verify CORS settings in `backend/server.js`
+- Ensure `VITE_SOCKET_URL` in frontend matches backend URL
 
-Material and technique recommendations are based on:
-- Industry best practices from laser engraving professionals
-- Material safety guidelines (xometry.com)
-- Resolution and scaling requirements (heatsign.com)
-- Community tutorials and case studies (YouTube laser engraving channels)
+### PWA not updating
 
-## License
+- Clear browser cache
+- Uninstall and reinstall the PWA
+- Check service worker in browser DevTools
 
-MIT License - Feel free to use and modify for your projects
+### Socket connection issues
 
-## Contributing
+- Check browser console for errors
+- Verify WebSocket support in your hosting environment
+- Render.com free tier may sleep after inactivity (takes ~30 seconds to wake up)
 
-Contributions welcome! Areas for improvement:
-- Advanced vectorization algorithms (integrate Potrace)
-- Support for additional file formats
-- GUI interface using Tkinter or web-based with Flask
-- Preset profiles for common laser engravers
-- Material database expansion
+## 📝 Future Enhancements
 
-## Support
+- [ ] Open Trivia DB API integration
+- [ ] Image/media questions support
+- [ ] Multiple game modes (buzzer-style, fastest finger, etc.)
+- [ ] Persistent leaderboards across games
+- [ ] Sound effects and animations
+- [ ] Admin dashboard for managing questions
+- [ ] Category selection before game starts
+- [ ] Configurable scoring rules
+- [ ] Team chat/reactions
+- [ ] Export game results
 
-For issues, questions, or suggestions, please open an issue on GitHub.
+## 🤝 Contributing
+
+Contributions are welcome! Areas for improvement:
+- Better mobile UX
+- Additional game modes
+- Sound effects and animations
+- Question database
+- Analytics dashboard
+
+## 📄 License
+
+MIT License - Free to use and modify for your bar game nights!
+
+## 🎉 Credits
+
+Built following the principles from the QuizClash tutorial and adapted for bar game nights.
+
+Perfect for bars, pubs, trivia nights, team building events, and parties!
+
+---
+
+**Have fun and may the best team win! 🏆**

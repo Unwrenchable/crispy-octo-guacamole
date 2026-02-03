@@ -43,8 +43,12 @@ class SocketService {
   }
 
   // Host events
-  createGame(hostName, callback) {
-    this.socket.emit('host:create-game', { hostName }, callback);
+  createGame(hostName, gameMode, genre, callback) {
+    this.socket.emit('host:create-game', { hostName, gameMode, genre }, callback);
+  }
+
+  loadQuestions(pin, count, callback) {
+    this.socket.emit('host:load-questions', { pin, count }, callback);
   }
 
   addQuestion(pin, question, callback) {
@@ -61,6 +65,19 @@ class SocketService {
 
   revealAnswer(pin, callback) {
     this.socket.emit('host:reveal-answer', { pin }, callback);
+  }
+
+  // Buzzer mode
+  activateBuzzer(pin, callback) {
+    this.socket.emit('host:activate-buzzer', { pin }, callback);
+  }
+
+  clearBuzzer(pin, callback) {
+    this.socket.emit('host:clear-buzzer', { pin }, callback);
+  }
+
+  teamBuzz(pin, teamId, callback) {
+    this.socket.emit('team:buzz', { pin, teamId }, callback);
   }
 
   // Team events
@@ -103,6 +120,19 @@ class SocketService {
 
   onAnswerSubmitted(callback) {
     this.socket.on('answer:submitted', callback);
+  }
+
+  // Buzzer mode listeners
+  onBuzzerActivated(callback) {
+    this.socket.on('buzzer:activated', callback);
+  }
+
+  onTeamBuzzed(callback) {
+    this.socket.on('team:buzzed', callback);
+  }
+
+  onBuzzerCleared(callback) {
+    this.socket.on('buzzer:cleared', callback);
   }
 
   // Remove listeners
