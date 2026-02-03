@@ -51,6 +51,10 @@ class SocketService {
     this.socket.emit('host:load-questions', { pin, count }, callback);
   }
 
+  loadAPIQuestions(pin, count, callback) {
+    this.socket.emit('host:load-api-questions', { pin, count }, callback);
+  }
+
   addQuestion(pin, question, callback) {
     this.socket.emit('host:add-question', { pin, question }, callback);
   }

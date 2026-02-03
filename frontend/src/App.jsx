@@ -4,6 +4,7 @@ import HostLobby from './pages/HostLobby';
 import HostGame from './pages/HostGame';
 import PlayerJoin from './pages/PlayerJoin';
 import PlayerGame from './pages/PlayerGame';
+import PlayerStats from './pages/PlayerStats';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/host/game" element={<HostGame />} />
         <Route path="/join" element={<PlayerJoin />} />
         <Route path="/play" element={<PlayerGame />} />
+        <Route path="/stats" element={<PlayerStats />} />
       </Routes>
     </Router>
   );
