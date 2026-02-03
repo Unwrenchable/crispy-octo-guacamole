@@ -18,15 +18,25 @@ function HostLobby() {
     category: 'General'
   });
   const [showAddQuestion, setShowAddQuestion] = useState(false);
+  const [gameMode, setGameMode] = useState('classic');
+  const [genre, setGenre] = useState('mixed');
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
   const hostName = location.state?.hostName || 'Host';
+  const passedGameMode = location.state?.gameMode || 'classic';
+  const passedGenre = location.state?.genre || 'mixed';
   const joinUrl = `${window.location.origin}/join?pin=${pin}`;
+
+  useEffect(() => {
+    setGameMode(passedGameMode);
+    setGenre(passedGenre);
+  }, [passedGameMode, passedGenre]);
 
   useEffect(() => {
     const socket = socketService.connect();
 
-    // Create game
-    socketService.createGame(hostName, (response) => {
+    // Create game with mode and genre
+    socketService.createGame(hostName, gameMode, genre, (response) => {
       if (response.success) {
         setPin(response.pin);
         setGameId(response.gameId);
@@ -45,7 +55,18 @@ function HostLobby() {
     return () => {
       socket.disconnect();
     };
-  }, [hostName]);
+  }, [hostName, gameMode, genre]);
+
+  const handleLoadQuestions = () => {
+    socketService.loadQuestions(pin, 10, (response) => {
+      if (response.success) {
+        setQuestionsLoaded(true);
+        alert(`${response.questionsCount} questions loaded!`);
+        // Update questions count
+        setQuestions(Array(response.questionsCount).fill({}));
+      }
+    });
+  };
 
   const handleAddQuestion = () => {
     if (!newQuestion.text || newQuestion.options.some(opt => !opt)) {
@@ -95,7 +116,28 @@ function HostLobby() {
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-2">🎯 Game Lobby</h1>
             <p className="text-gray-600">Host: {hostName}</p>
+            <div className="flex justify-center gap-4 mt-2">
+              <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
+                Mode: {gameMode}
+              </span>
+              <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                Genre: {genre}
+              </span>
+            </div>
           </div>
+
+          {/* Quick Load Questions Button */}
+          {!questionsLoaded && (
+            <div className="mb-6 text-center">
+              <button
+                onClick={handleLoadQuestions}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
+              >
+                🎲 Load 10 Pre-Made Questions
+              </button>
+              <p className="text-sm text-gray-500 mt-2">Or add your own questions below</p>
+            </div>
+          )}
 
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             {/* QR Code and PIN */}
