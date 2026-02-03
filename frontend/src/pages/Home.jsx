@@ -22,7 +22,9 @@ function Home() {
     { id: 'history', name: 'History', icon: '📜' },
     { id: 'geography', name: 'Geography', icon: '🌍' },
     { id: 'pop-culture', name: 'Pop Culture', icon: '📱' },
-    { id: 'food-drink', name: 'Food & Drink', icon: '🍔' }
+    { id: 'food-drink', name: 'Food & Drink', icon: '🍔' },
+    { id: 'technology', name: 'Technology', icon: '💻' },
+    { id: 'games', name: 'Games', icon: '🎮' }
   ];
 
   const handleHostGame = () => {
