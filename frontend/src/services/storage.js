@@ -150,8 +150,8 @@ class StorageService {
         updated = true;
       }
 
-      // Speed Demon
-      if (gameData.gameMode === 'speed-round' && !achievements.speedDemon.unlocked) {
+      // Speed Demon - unlock for speed-round or lightning mode
+      if ((gameData.gameMode === 'speed-round' || gameData.gameMode === 'lightning') && !achievements.speedDemon.unlocked) {
         achievements.speedDemon.unlocked = true;
         updated = true;
       }

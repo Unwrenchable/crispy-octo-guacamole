@@ -45,13 +45,20 @@ async function fetchOpenTriviaQuestions(amount = 10, category = null, difficulty
         try {
           const result = JSON.parse(data);
           if (result.response_code === 0) {
-            const questions = result.results.map(q => ({
-              text: decodeHTML(q.question),
-              options: shuffleArray([...q.incorrect_answers.map(a => decodeHTML(a)), decodeHTML(q.correct_answer)]),
-              correctAnswer: decodeHTML(q.correct_answer),
-              category: decodeHTML(q.category),
-              difficulty: q.difficulty
-            }));
+            const questions = result.results.map(q => {
+              // Shuffle options BEFORE creating the question object
+              const allOptions = [...q.incorrect_answers.map(a => decodeHTML(a)), decodeHTML(q.correct_answer)];
+              const shuffledOptions = shuffleArray(allOptions);
+              const correctAnswer = decodeHTML(q.correct_answer);
+              
+              return {
+                text: decodeHTML(q.question),
+                options: shuffledOptions,
+                correctAnswer: correctAnswer, // This will match the text in shuffledOptions
+                category: decodeHTML(q.category),
+                difficulty: q.difficulty
+              };
+            });
             resolve(questions);
           } else {
             reject(new Error('Failed to fetch questions from Open Trivia DB'));
@@ -264,7 +271,7 @@ const QUESTION_BANKS = {
     { text: "What is the national dish of Spain?", options: ["Paella", "Tapas", "Gazpacho", "Churros"], correctAnswer: "Paella", category: "Food & Drink" },
     { text: "What is the main ingredient in traditional Japanese sake?", options: ["Rice", "Wheat", "Barley", "Corn"], correctAnswer: "Rice", category: "Food & Drink" },
     { text: "Which nut is used to make marzipan?", options: ["Walnut", "Cashew", "Almond", "Pistachio"], correctAnswer: "Almond", category: "Food & Drink" },
-    { text: "What color is Coca-Cola originally?", options: ["Brown", "Black", "Green", "Red"], correctAnswer: "Green", category: "Food & Drink" },
+    { text: "What color is Coca-Cola originally?", options: ["Brown", "Black", "Green", "Red"], correctAnswer: "Brown", category: "Food & Drink" },
     { text: "What is the most consumed beverage in the world after water?", options: ["Coffee", "Tea", "Beer", "Milk"], correctAnswer: "Tea", category: "Food & Drink" },
     { text: "Which vegetable is used to make sauerkraut?", options: ["Carrot", "Cabbage", "Cucumber", "Beet"], correctAnswer: "Cabbage", category: "Food & Drink" },
     { text: "What is the main ingredient in tahini?", options: ["Chickpeas", "Peanuts", "Sesame seeds", "Sunflower seeds"], correctAnswer: "Sesame seeds", category: "Food & Drink" },
@@ -376,11 +383,11 @@ class Game {
       questionPool = [...QUESTION_BANKS[this.genre]];
     }
 
-    // Filter out already used questions (based on text to avoid repeats)
+    // Filter out already used questions (based on text to avoid repeats in session)
     const usedTexts = new Set(this.questions.map(q => q.text));
     const availableQuestions = questionPool.filter(q => !usedTexts.has(q.text));
     
-    // If we've used all available questions, reset and allow repeats
+    // If all available questions have been used, use the full pool (allows repeats)
     const questionsToUse = availableQuestions.length > 0 ? availableQuestions : questionPool;
 
     // Shuffle and select questions

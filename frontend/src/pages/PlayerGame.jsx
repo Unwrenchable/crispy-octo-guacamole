@@ -6,7 +6,7 @@ import storageService from '../services/storage';
 function PlayerGame() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, teamId, teamName, gameMode, genre } = location.state || {};
+  const { pin, teamId, teamName, gameMode = 'classic', genre = 'mixed' } = location.state || {};
   
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);

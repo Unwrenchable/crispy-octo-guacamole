@@ -9,7 +9,7 @@ function Home() {
 
   const gameModes = [
     { id: 'classic', name: 'Classic Trivia', icon: '🎯', description: 'Traditional quiz with timed questions' },
-    { id: 'buzzer', name: 'Buzzer Mode', icon: '⚡', description: 'First to buzz in gets to answer' },
+    { id: 'buzzer', name: 'Buzzer Mode', icon: '🔔', description: 'First to buzz in gets to answer' },
     { id: 'speed-round', name: 'Speed Round', icon: '⏱️', description: 'Fast-paced quick questions' },
     { id: 'lightning', name: 'Lightning Round', icon: '⚡', description: 'Ultra-fast 10-second questions!' }
   ];
