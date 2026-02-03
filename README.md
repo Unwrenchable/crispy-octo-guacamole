@@ -5,20 +5,41 @@ A real-time multiplayer game platform perfect for bar game nights, built with Re
 ## ✨ Features
 
 ### 🎯 Multiple Game Modes
-- **Classic Trivia** - Traditional quiz with timed questions and multiple choice
+- **Classic Trivia** - Traditional quiz with 30-second timed questions
 - **Buzzer Mode** - First to buzz in gets to answer (game show style)
-- **Speed Round** - Fast-paced quick questions with reduced time limits
+- **Speed Round** - Fast-paced 15-second questions
+- **Lightning Round** - Ultra-fast 10-second questions for maximum challenge!
 
-### 🎲 Multiple Genres & Themes
+### 🎲 Multiple Genres & Themes (200+ Questions!)
 - **Mixed** - Questions from all categories
-- **Sports** ⚽ - Basketball, football, tennis, and more
-- **Movies** 🎬 - Film trivia and cinema knowledge
-- **Music** 🎵 - Artists, albums, and music history
-- **Science** 🔬 - Chemistry, physics, and biology
-- **History** 📜 - World events and historical figures
-- **Geography** 🌍 - Countries, capitals, and landmarks
-- **Pop Culture** 📱 - Social media, trends, and entertainment
-- **Food & Drink** 🍔 - Culinary knowledge and beverages
+- **Sports** ⚽ - Basketball, football, tennis, and more (20 questions)
+- **Movies** 🎬 - Film trivia and cinema knowledge (20 questions)
+- **Music** 🎵 - Artists, albums, and music history (20 questions)
+- **Science** 🔬 - Chemistry, physics, and biology (20 questions)
+- **History** 📜 - World events and historical figures (20 questions)
+- **Geography** 🌍 - Countries, capitals, and landmarks (20 questions)
+- **Pop Culture** 📱 - Social media, trends, and entertainment (20 questions)
+- **Food & Drink** 🍔 - Culinary knowledge and beverages (20 questions)
+- **Technology** 💻 - Tech, programming, and innovation (20 questions)
+- **Games** 🎮 - Video games and gaming culture (20 questions)
+
+### 🌐 Open Trivia DB Integration
+- **External Question API** - Load questions from Open Trivia Database
+- **Unlimited variety** - Access thousands of additional questions
+- **One-click loading** - Easy integration with existing game flow
+
+### 📊 Player Stats & Achievements
+- **Game History** - Track your last 50 games with detailed stats
+- **Persistent Leaderboard** - All-time high scores across all players
+- **Player Statistics** - Total games, wins, average score, win rate
+- **7 Achievements** - Unlock special achievements:
+  - 🏆 First Victory - Win your first game
+  - ⚡ Speed Demon - Complete a speed or lightning round
+  - 🎓 Trivia Master - Play 10 games
+  - 💯 Perfect Score - Get all questions correct
+  - 🦋 Social Butterfly - Play with 5+ teams
+  - 🦉 Night Owl - Play after midnight
+  - 🌟 Category Expert - Win in every category
 
 ### 📱 Phone-as-Gamepad
 - **No Bluetooth needed** - Pure web-based, works on any device
@@ -27,7 +48,7 @@ A real-time multiplayer game platform perfect for bar game nights, built with Re
 - **Real-time updates** via WebSocket
 
 ### 🎪 Additional Features
-- **Pre-loaded question banks** - 40+ questions across 8 genres
+- **Smart question tracking** - No repeats within a session
 - **Custom questions** - Add your own questions
 - **Team-based competition**
 - **Host Dashboard** for TV/projector display
