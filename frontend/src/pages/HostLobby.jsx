@@ -87,9 +87,15 @@ function HostLobby() {
       return;
     }
 
-    socketService.addQuestion(pin, newQuestion, (response) => {
+    // correctAnswer is stored as an index; convert to the actual option text before sending
+    const questionToAdd = {
+      ...newQuestion,
+      correctAnswer: newQuestion.options[newQuestion.correctAnswer],
+    };
+
+    socketService.addQuestion(pin, questionToAdd, (response) => {
       if (response.success) {
-        setQuestions([...questions, newQuestion]);
+        setQuestions([...questions, questionToAdd]);
         setNewQuestion({
           text: '',
           options: ['', '', '', ''],
