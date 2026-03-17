@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import socketService from '../services/socket';
 
@@ -10,9 +10,39 @@ function HostGame() {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  // correctAnswer stores the correct option TEXT (string from server)
   const [correctAnswer, setCorrectAnswer] = useState(null);
   const [gameEnded, setGameEnded] = useState(false);
   const [answeredTeams, setAnsweredTeams] = useState(new Set());
+  const [timeLeft, setTimeLeft] = useState(null);
+  const timerRef = useRef(null);
+
+  // Countdown timer — starts on new question, stops when answer is revealed
+  useEffect(() => {
+    // Clear any existing timer first using a local reference to avoid races
+    const existingId = timerRef.current;
+    if (existingId) clearInterval(existingId);
+    timerRef.current = null;
+
+    if (!currentQuestion || showAnswer) {
+      setTimeLeft(null);
+      return;
+    }
+
+    setTimeLeft(currentQuestion.timeLimit);
+    const id = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(id);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    timerRef.current = id;
+
+    return () => clearInterval(id);
+  }, [currentQuestion, showAnswer]);
 
   useEffect(() => {
     if (!pin) {
@@ -22,24 +52,23 @@ function HostGame() {
 
     const socket = socketService.connect();
 
+    const startQuestion = (question) => {
+      setCurrentQuestion(question);
+      setShowAnswer(false);
+      setCorrectAnswer(null);
+      setAnsweredTeams(new Set());
+    };
+
     // Listen for answer submissions
     socketService.onAnswerSubmitted((data) => {
       setAnsweredTeams(prev => new Set([...prev, data.teamId]));
     });
 
     // Listen for game started
-    socketService.onGameStarted((data) => {
-      setCurrentQuestion(data.question);
-      setShowAnswer(false);
-      setAnsweredTeams(new Set());
-    });
+    socketService.onGameStarted((data) => startQuestion(data.question));
 
     // Listen for new questions
-    socketService.onNewQuestion((data) => {
-      setCurrentQuestion(data.question);
-      setShowAnswer(false);
-      setAnsweredTeams(new Set());
-    });
+    socketService.onNewQuestion((data) => startQuestion(data.question));
 
     // Listen for answer revealed
     socketService.onAnswerRevealed((data) => {
@@ -77,6 +106,7 @@ function HostGame() {
         } else {
           setCurrentQuestion(response.question);
           setShowAnswer(false);
+          setCorrectAnswer(null);
           setAnsweredTeams(new Set());
         }
       }
@@ -89,11 +119,11 @@ function HostGame() {
 
   if (gameEnded) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-600 p-8">
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 to-green-950 p-8">
+        <div className="max-w-4xl mx-auto bg-black/60 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-amber-500/30">
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold text-gray-800 mb-4">🏆 Game Over!</h1>
-            <p className="text-2xl text-gray-600">Final Results</p>
+            <h1 className="text-5xl font-bold text-white mb-4">🏆 Game Over!</h1>
+            <p className="text-2xl text-amber-400">Final Results</p>
           </div>
 
           <div className="space-y-4 mb-8">
@@ -102,12 +132,12 @@ function HostGame() {
                 key={index}
                 className={`flex items-center justify-between p-6 rounded-xl ${
                   index === 0
-                    ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-white shadow-lg transform scale-105'
+                    ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-black shadow-lg transform scale-105'
                     : index === 1
                     ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
                     : index === 2
-                    ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white'
-                    : 'bg-gray-100'
+                    ? 'bg-gradient-to-r from-orange-600 to-amber-700 text-white'
+                    : 'bg-white/5 text-white'
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -116,7 +146,7 @@ function HostGame() {
                   </span>
                   <div>
                     <div className="text-2xl font-bold">{team.name}</div>
-                    <div className="text-sm opacity-90">{team.answersCount} answers</div>
+                    <div className="text-sm opacity-70">{team.answersCount} answers</div>
                   </div>
                 </div>
                 <div className="text-4xl font-bold">{team.score}</div>
@@ -126,25 +156,35 @@ function HostGame() {
 
           <button
             onClick={handleEndGame}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg text-xl transition duration-200"
+            className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-4 px-6 rounded-xl text-xl transition duration-200"
           >
-            Return to Home
+            Return to Home 🎱
           </button>
         </div>
       </div>
     );
   }
 
+  // Timer colour for host display
+  const timerColour = timeLeft !== null
+    ? timeLeft <= 5 ? 'text-red-400' : timeLeft <= 10 ? 'text-amber-400' : 'text-green-400'
+    : 'text-white';
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Top Bar */}
-      <div className="bg-gray-800 p-4 flex justify-between items-center">
-        <div className="text-xl font-semibold">PIN: {pin}</div>
-        <div className="text-xl">
-          {currentQuestion && `Question ${currentQuestion.questionNumber} of ${currentQuestion.totalQuestions}`}
+      <div className="bg-gray-800 p-4 flex justify-between items-center border-b border-gray-700">
+        <div className="text-xl font-semibold text-amber-400">PIN: <span className="font-bold text-white tracking-widest">{pin}</span></div>
+        <div className="text-center">
+          {timeLeft !== null && !showAnswer && (
+            <div className={`text-5xl font-bold tabular-nums leading-none ${timerColour}`}>{timeLeft}</div>
+          )}
+          {currentQuestion && (
+            <div className="text-sm text-gray-400 mt-1">Question {currentQuestion.questionNumber} / {currentQuestion.totalQuestions}</div>
+          )}
         </div>
         <div className="text-xl">
-          Answered: {answeredTeams.size} / {initialTeams?.length || 0}
+          Answered: <span className="font-bold text-amber-400">{answeredTeams.size}</span> / {initialTeams?.length || 0}
         </div>
       </div>
 
@@ -153,38 +193,41 @@ function HostGame() {
         {currentQuestion ? (
           <div className="space-y-8">
             {/* Question */}
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-center">
-              <div className="text-lg mb-4 opacity-90">{currentQuestion.category}</div>
-              <h2 className="text-5xl font-bold mb-6">{currentQuestion.text}</h2>
+            <div className="bg-gradient-to-r from-purple-700 to-blue-700 rounded-2xl p-10 text-center shadow-2xl">
+              <div className="text-base mb-3 opacity-80 uppercase tracking-widest">{currentQuestion.category}</div>
+              <h2 className="text-4xl font-bold leading-snug">{currentQuestion.text}</h2>
             </div>
 
-            {/* Options */}
+            {/* Options — highlight correct answer by TEXT comparison */}
             <div className="grid grid-cols-2 gap-6">
               {currentQuestion.options.map((option, index) => (
                 <div
                   key={index}
-                  className={`p-8 rounded-xl text-2xl font-semibold transition-all ${
-                    showAnswer && index === correctAnswer
-                      ? 'bg-green-500 ring-4 ring-green-300'
-                      : 'bg-gray-800 hover:bg-gray-700'
+                  className={`p-8 rounded-xl text-2xl font-semibold transition-all border-2 ${
+                    showAnswer && option === correctAnswer
+                      ? 'bg-green-600 border-green-400 ring-4 ring-green-300 shadow-lg'
+                      : showAnswer
+                      ? 'bg-gray-800 border-gray-700 opacity-50'
+                      : 'bg-gray-800 border-gray-700'
                   }`}
                 >
-                  <span className="text-yellow-400 mr-4">{String.fromCharCode(65 + index)}</span>
+                  <span className="text-amber-400 mr-4">{String.fromCharCode(65 + index)}</span>
                   {option}
+                  {showAnswer && option === correctAnswer && <span className="ml-4">✅</span>}
                 </div>
               ))}
             </div>
 
             {/* Leaderboard (when answer is shown) */}
             {showAnswer && leaderboard.length > 0 && (
-              <div className="bg-gray-800 rounded-2xl p-6">
-                <h3 className="text-3xl font-bold mb-4 text-center">Current Standings</h3>
+              <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                <h3 className="text-3xl font-bold mb-4 text-center text-amber-400">Current Standings</h3>
                 <div className="grid grid-cols-3 gap-4">
                   {leaderboard.slice(0, 6).map((team, index) => (
-                    <div key={index} className="bg-gray-700 p-4 rounded-lg">
+                    <div key={index} className={`p-4 rounded-lg ${index === 0 ? 'bg-amber-500 text-black' : 'bg-gray-700'}`}>
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold">#{index + 1} {team.name}</span>
-                        <span className="text-yellow-400 font-bold">{team.score}</span>
+                        <span className="font-semibold">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`} {team.name}</span>
+                        <span className={`font-bold ${index === 0 ? 'text-black' : 'text-amber-400'}`}>{team.score}</span>
                       </div>
                     </div>
                   ))}
@@ -197,7 +240,7 @@ function HostGame() {
               {!showAnswer ? (
                 <button
                   onClick={handleRevealAnswer}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-12 rounded-lg text-2xl transition duration-200 transform hover:scale-105"
+                  className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-4 px-12 rounded-lg text-2xl transition duration-200 transform hover:scale-105 shadow-lg"
                 >
                   Reveal Answer 🎯
                 </button>

@@ -21,6 +21,9 @@ function HostLobby() {
   const [gameMode, setGameMode] = useState('classic');
   const [genre, setGenre] = useState('mixed');
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
+  const [loadCount, setLoadCount] = useState(20);
+  const [poolSize, setPoolSize] = useState(null);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   const hostName = location.state?.hostName || 'Host';
   const passedGameMode = location.state?.gameMode || 'classic';
@@ -60,20 +63,37 @@ function HostLobby() {
   }, [hostName, gameMode, genre]);
 
   const handleLoadQuestions = () => {
-    socketService.loadQuestions(pin, 10, (response) => {
+    if (!pin) return;
+    setLoadingQuestions(true);
+    socketService.loadQuestions(pin, loadCount, (response) => {
+      setLoadingQuestions(false);
       if (response.success) {
         setQuestionsLoaded(true);
-        alert(`${response.questionsCount} questions loaded!`);
         setQuestions(Array(response.questionsCount).fill({}));
+        if (response.poolSize) setPoolSize(response.poolSize);
+      }
+    });
+  };
+
+  const handleLoadMore = () => {
+    if (!pin) return;
+    setLoadingQuestions(true);
+    socketService.loadQuestions(pin, loadCount, (response) => {
+      setLoadingQuestions(false);
+      if (response.success) {
+        setQuestions(Array(response.questionsCount).fill({}));
+        if (response.poolSize) setPoolSize(response.poolSize);
       }
     });
   };
 
   const handleLoadAPIQuestions = () => {
-    socketService.loadAPIQuestions(pin, 10, (response) => {
+    if (!pin) return;
+    setLoadingQuestions(true);
+    socketService.loadAPIQuestions(pin, loadCount, (response) => {
+      setLoadingQuestions(false);
       if (response.success) {
         setQuestionsLoaded(true);
-        alert(`${response.questionsCount} API questions loaded!`);
         setQuestions(Array(response.questionsCount).fill({}));
       } else {
         alert('Failed to load API questions. Using pre-made questions instead.');
@@ -87,9 +107,15 @@ function HostLobby() {
       return;
     }
 
-    socketService.addQuestion(pin, newQuestion, (response) => {
+    // correctAnswer is stored as an index; convert to the actual option text before sending
+    const questionToAdd = {
+      ...newQuestion,
+      correctAnswer: newQuestion.options[newQuestion.correctAnswer],
+    };
+
+    socketService.addQuestion(pin, questionToAdd, (response) => {
       if (response.success) {
-        setQuestions([...questions, newQuestion]);
+        setQuestions([...questions, questionToAdd]);
         setNewQuestion({
           text: '',
           options: ['', '', '', ''],
@@ -181,24 +207,60 @@ function HostLobby() {
             </div>
           )}
 
-          {/* Quick Load Questions Button (trivia only) */}
-          {!isPartyGame && !questionsLoaded && (
-            <div className="mb-6 text-center">
-              <div className="flex gap-4 justify-center flex-wrap">
+          {/* Quick Load Questions (trivia only) */}
+          {!isPartyGame && (
+            <div className="mb-6 bg-gray-800 rounded-xl p-5 border border-gray-700">
+              <div className="flex flex-wrap items-center gap-4 mb-3">
+                <div className="flex-1">
+                  <p className="text-white font-semibold mb-1">🎲 Questions per game</p>
+                  <div className="flex gap-2">
+                    {[10, 15, 20, 30].map(n => (
+                      <button
+                        key={n}
+                        onClick={() => setLoadCount(n)}
+                        className={`px-4 py-2 rounded-lg font-bold text-sm transition ${
+                          loadCount === n
+                            ? 'bg-amber-500 text-black'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {poolSize !== null && (
+                  <div className="text-center">
+                    <p className="text-xs text-gray-400">Question pool</p>
+                    <p className="text-2xl font-bold text-amber-400">{poolSize}+</p>
+                    <p className="text-xs text-gray-400">available</p>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-3 flex-wrap">
                 <button
-                  onClick={handleLoadQuestions}
-                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
+                  onClick={questionsLoaded ? handleLoadMore : handleLoadQuestions}
+                  disabled={!pin || loadingQuestions}
+                  className="flex-1 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
-                  🎲 Load 10 Pre-Made Questions
+                  {loadingQuestions ? '⏳ Loading...' : questionsLoaded ? `🔄 Reload ${loadCount} Questions (Random)` : `🎲 Load ${loadCount} Pre-Made Questions`}
                 </button>
                 <button
                   onClick={handleLoadAPIQuestions}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 transform hover:scale-105"
+                  disabled={!pin || loadingQuestions}
+                  className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105"
                 >
-                  🌐 Load 10 API Questions
+                  {loadingQuestions ? '⏳ Loading...' : `🌐 Load ${loadCount} Live Trivia Questions`}
                 </button>
               </div>
-              <p className="text-sm text-gray-500 mt-2">Or add your own questions below</p>
+              {questionsLoaded && (
+                <p className="text-amber-400 text-sm text-center mt-2 font-semibold">
+                  ✅ {questions.length} questions loaded — every game shuffles a different random set!
+                </p>
+              )}
+              {!questionsLoaded && (
+                <p className="text-gray-500 text-sm text-center mt-2">Choose a count above, then load — or add your own questions below</p>
+              )}
             </div>
           )}
 
