@@ -57,77 +57,67 @@ function Home() {
   const tier = profile ? getTier(profile.points) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Putters bar atmosphere background */}
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Putters bar atmosphere orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-green-800 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-green-900 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse-slow" style={{animationDelay: '2s'}}></div>
-        {/* Subtle sparkles */}
-        {[...Array(12)].map((_, i) => (
-          <div key={i} className="absolute text-amber-500 text-2xl animate-pulse-slow opacity-10" style={{
-            left: `${(i * 83 + 7) % 95}%`,
-            top: `${(i * 61 + 13) % 90}%`,
-            animationDelay: `${i * 0.3}s`
-          }}>✦</div>
-        ))}
+        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full filter blur-3xl opacity-20" style={{background:'#1a5c3a', animation:'pulse 4s ease-in-out infinite'}}></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full filter blur-3xl opacity-15" style={{background:'#7c4a00', animation:'pulse 4s ease-in-out infinite', animationDelay:'1.5s'}}></div>
       </div>
 
-      <div className="max-w-2xl w-full relative z-10 animate-fade-in">
-        <div className="bg-black/60 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-amber-500/20">
+      <div className="max-w-2xl w-full relative z-10">
+        <div className="pv-card p-8">
           {/* Header */}
-          <div className="text-center mb-8 animate-slide-down">
+          <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-3">
-              <span className="text-5xl">🎱</span>
+              <span className="text-5xl pv-flicker">🎱</span>
               <span className="text-5xl">🎨</span>
               <span className="text-5xl">🍎</span>
             </div>
-            <h1 className="text-5xl font-display font-bold mb-2 text-white drop-shadow-lg">
+            <h1 className="text-5xl font-bold mb-2 pv-title">
               Bar Night Games
             </h1>
-            <p className="text-amber-400 text-lg font-medium">Trivia · Pictionary · Apples to Apples · Vegas Edition!</p>
-            <div className="mt-2">
-              <span className="inline-block bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">🎱 Putters — Bets, Brews &amp; Billiards</span>
-            </div>
+            <p className="text-lg font-medium mb-3" style={{color:'rgba(245,230,200,0.75)'}}>Trivia · Pictionary · Apples to Apples · Vegas Edition!</p>
+            <span className="pv-badge">🎱 Putters — Bets, Brews &amp; Billiards</span>
           </div>
 
-          {/* Rewards profile strip - shown if logged in */}
+          {/* Rewards profile strip */}
           {profile ? (
             <button
               onClick={() => navigate('/rewards')}
-              className="w-full bg-gradient-to-r from-amber-500/20 to-green-800/20 border-2 border-amber-500/60 hover:border-amber-400 rounded-2xl p-4 mb-6 flex items-center justify-between transition-all duration-200 group"
+              className="pv-profile-strip w-full mb-6"
             >
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{tier.icon}</span>
                 <div className="text-left">
-                  <div className="text-white font-bold">{profile.displayName}</div>
-                  <div className="text-amber-400 text-sm">{tier.name} Member</div>
+                  <div className="font-bold" style={{color:'#f5e6c8'}}>{profile.displayName}</div>
+                  <div className="text-sm" style={{color:'rgba(212,160,23,0.8)'}}>{tier.name} Member</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-amber-400 font-black text-2xl">{profile.points}</div>
-                <div className="text-white/60 text-xs">Putters Points →</div>
+                <div className="pv-score text-3xl">{profile.points}</div>
+                <div className="text-xs" style={{color:'rgba(245,230,200,0.45)'}}>Putters Points →</div>
               </div>
             </button>
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="w-full bg-gradient-to-r from-amber-500/10 to-green-800/10 border-2 border-amber-500/30 hover:border-amber-500 rounded-2xl p-4 mb-6 flex items-center justify-between transition-all duration-200"
+              className="pv-profile-strip w-full mb-6"
+              style={{borderColor:'rgba(212,160,23,0.25)'}}
             >
               <div className="flex items-center gap-3">
                 <span className="text-3xl">🎁</span>
                 <div className="text-left">
-                  <div className="text-white font-bold">Join Putters Rewards</div>
-                  <div className="text-amber-400/80 text-sm">Earn points every game · Redeem for perks!</div>
+                  <div className="font-bold" style={{color:'#f5e6c8'}}>Join Putters Rewards</div>
+                  <div className="text-sm" style={{color:'rgba(212,160,23,0.65)'}}>Earn points every game · Redeem for perks!</div>
                 </div>
               </div>
-              <div className="text-amber-400 font-bold text-sm whitespace-nowrap ml-2">Sign In →</div>
+              <div className="font-bold text-sm whitespace-nowrap ml-2" style={{color:'rgba(212,160,23,0.8)'}}>Sign In →</div>
             </button>
           )}
 
           <div className="space-y-6">
-            <div className="animate-slide-up" style={{animationDelay: '0.1s'}}>
-              <h2 className="text-xl font-display font-semibold text-white mb-4">Host a Game</h2>
+            <div>
+              <h2 className="text-xl font-bold mb-4" style={{color:'#f5e6c8'}}>Host a Game</h2>
               
               <input
                 type="text"
@@ -135,25 +125,22 @@ function Home() {
                 value={hostName}
                 onChange={(e) => setHostName(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleHostGame()}
-                className="w-full px-4 py-3 rounded-xl border-2 border-amber-500/50 bg-white/10 text-white placeholder-white/40 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all duration-200 mb-4"
+                className="pv-input mb-4"
+                style={{fontSize:'1rem'}}
               />
 
               <div className="mb-4">
-                <label className="block text-sm font-semibold text-amber-400 mb-3">Game Mode</label>
+                <label className="block text-sm font-semibold mb-3" style={{color:'rgba(212,160,23,0.85)'}}>Game Mode</label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {gameModes.map(mode => (
                     <button
                       key={mode.id}
                       onClick={() => setGameMode(mode.id)}
-                      className={`p-3 rounded-xl border-2 transition-all duration-200 cursor-pointer group text-left ${
-                        gameMode === mode.id
-                          ? 'border-amber-500 bg-amber-500/20 shadow-md ring-2 ring-amber-500'
-                          : 'border-white/20 bg-white/5 hover:border-amber-500/50 hover:shadow-sm'
-                      }`}
+                      className={`pv-mode-card ${gameMode === mode.id ? 'pv-mode-card-selected' : ''}`}
                     >
-                      <div className="text-2xl mb-1 transform group-hover:scale-110 transition-transform duration-200">{mode.icon}</div>
-                      <div className="font-semibold text-sm text-white">{mode.name}</div>
-                      <div className="text-xs text-white/60 mt-1">{mode.description}</div>
+                      <div className="text-2xl mb-1">{mode.icon}</div>
+                      <div className="font-semibold text-sm" style={{color:'#f5e6c8'}}>{mode.name}</div>
+                      <div className="text-xs mt-1" style={{color:'rgba(245,230,200,0.55)'}}>{mode.description}</div>
                     </button>
                   ))}
                 </div>
@@ -161,21 +148,18 @@ function Home() {
 
               {!isPictionaryOrApples && (
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-amber-400 mb-3">Genre/Theme</label>
+                  <label className="block text-sm font-semibold mb-3" style={{color:'rgba(212,160,23,0.85)'}}>Genre/Theme</label>
                   <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                     {genres.map(g => (
                       <button
                         key={g.id}
                         onClick={() => setGenre(g.id)}
-                        className={`p-3 rounded-xl border-2 transition-all duration-200 cursor-pointer py-3 group ${
-                          genre === g.id
-                            ? 'border-amber-500 bg-amber-500/20 shadow-md ring-2 ring-amber-500'
-                            : 'border-white/20 bg-white/5 hover:border-amber-500/50 hover:shadow-sm'
-                        } ${g.id === 'las-vegas' ? 'col-span-1' : ''}`}
+                        className={`pv-mode-card ${genre === g.id ? 'pv-mode-card-selected' : ''}`}
+                        style={{padding:'12px 8px', textAlign:'center'}}
                       >
-                        <div className="text-xl mb-1 transform group-hover:scale-110 transition-transform duration-200">{g.icon}</div>
-                        <div className="text-xs font-semibold text-white">{g.name}</div>
-                        {g.id === 'las-vegas' && <div className="text-xs text-amber-400">🌟 Hot!</div>}
+                        <div className="text-xl mb-1">{g.icon}</div>
+                        <div className="text-xs font-semibold" style={{color:'#f5e6c8'}}>{g.name}</div>
+                        {g.id === 'las-vegas' && <div className="text-xs" style={{color:'rgba(212,160,23,0.9)'}}>🌟 Hot!</div>}
                       </button>
                     ))}
                   </div>
@@ -183,8 +167,8 @@ function Home() {
               )}
 
               {isPictionaryOrApples && (
-                <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border-2 border-amber-500/40">
-                  <p className="text-amber-400 text-sm font-semibold text-center">
+                <div className="mb-6 pv-felt-section p-4">
+                  <p className="text-sm font-semibold text-center" style={{color:'rgba(212,160,23,0.9)'}}>
                     {gameMode === 'pictionary'
                       ? '🎨 Pictionary — Players take turns drawing while others guess! Fun for all!'
                       : '🍎 Apples to Apples — Judge picks the funniest matching card each round!'}
@@ -195,49 +179,39 @@ function Home() {
               <button
                 onClick={handleHostGame}
                 disabled={!hostName.trim()}
-                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-amber-500 to-amber-600 text-black hover:from-amber-400 hover:to-amber-500 hover:shadow-xl hover:-translate-y-0.5 shadow-lg text-xl uppercase tracking-wide"
+                className="pv-btn pv-btn-gold w-full text-xl"
               >
-                <span className="flex items-center justify-center gap-2">
-                  Create Game Room <span className="text-2xl">🎱</span>
-                </span>
+                Create Game Room 🎱
               </button>
             </div>
 
-            <div className="relative animate-slide-up" style={{animationDelay: '0.2s'}}>
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t-2 border-white/10"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-transparent text-amber-400 font-medium">or</span>
-              </div>
-            </div>
+            <div className="pv-divider"></div>
 
-            <div className="animate-slide-up" style={{animationDelay: '0.3s'}}>
-              <h2 className="text-xl font-display font-semibold text-white mb-4">Join a Game</h2>
+            <div>
+              <h2 className="text-xl font-bold mb-4" style={{color:'#f5e6c8'}}>Join a Game</h2>
               <button
                 onClick={handleJoinGame}
-                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-green-700 to-green-800 text-white hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-0.5 shadow-lg text-xl uppercase tracking-wide border border-green-600"
+                className="pv-btn pv-btn-green w-full text-xl"
               >
-                <span className="flex items-center justify-center gap-2">
-                  Enter Game PIN <span className="text-2xl">🔢</span>
-                </span>
+                Enter Game PIN 🔢
               </button>
             </div>
           </div>
 
           {/* All-Time Leaderboard */}
-          <div className="mt-8 animate-slide-up" style={{animationDelay: '0.4s'}}>
+          <div className="mt-8">
             <button
               onClick={() => setShowLeaderboard(!showLeaderboard)}
-              className="w-full text-amber-400 hover:text-amber-300 font-semibold text-center py-2"
+              className="w-full font-semibold text-center py-2 transition"
+              style={{color:'rgba(212,160,23,0.75)', background:'none', border:'none', cursor:'pointer'}}
             >
               🏆 {showLeaderboard ? 'Hide' : 'Show'} All-Time Leaderboard
             </button>
             {showLeaderboard && allTimeLeaderboard.length > 0 && (
-              <div className="mt-3 bg-white/5 rounded-xl p-4 border border-white/10">
-                <h3 className="text-white font-bold text-center mb-3">🏆 Hall of Fame</h3>
+              <div className="mt-3 pv-felt-section p-4">
+                <h3 className="font-bold text-center mb-3" style={{color:'#f5e6c8'}}>🏆 Hall of Fame</h3>
                 {allTimeLeaderboard.slice(0, 10).map((entry, idx) => (
-                  <div key={idx} className={`flex justify-between items-center py-2 px-3 rounded-lg mb-1 ${idx === 0 ? 'bg-amber-500/30 text-amber-400' : idx === 1 ? 'bg-gray-300/10 text-white' : idx === 2 ? 'bg-amber-800/20 text-amber-200' : 'text-white/70'}`}>
+                  <div key={idx} className={`flex justify-between items-center py-2 px-3 rounded-lg mb-1 ${idx === 0 ? 'pv-row-gold' : idx === 1 ? 'pv-row-silver' : idx === 2 ? 'pv-row-bronze' : 'pv-row-default'}`}>
                     <span className="font-semibold">{idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx+1}`} {entry.teamName}</span>
                     <span className="font-bold">{entry.highScore} pts</span>
                   </div>
@@ -245,18 +219,17 @@ function Home() {
               </div>
             )}
             {showLeaderboard && allTimeLeaderboard.length === 0 && (
-              <p className="text-white/50 text-center mt-2 text-sm">No games played yet. Be the first champion! 🏆</p>
+              <p className="text-center mt-2 text-sm" style={{color:'rgba(245,230,200,0.4)'}}>No games played yet. Be the first champion! 🏆</p>
             )}
           </div>
 
-          <div className="mt-6 text-center text-sm text-white/50 space-y-1 animate-fade-in" style={{animationDelay: '0.5s'}}>
-            <p className="font-medium text-amber-400">Perfect for bars, pubs &amp; late night fun!</p>
-            <p className="flex items-center justify-center gap-1">
-              Your phone is your gamepad - no Bluetooth needed! <span>📱</span>
-            </p>
+          <div className="mt-6 text-center text-sm space-y-1">
+            <p className="font-medium" style={{color:'rgba(212,160,23,0.75)'}}>Perfect for bars, pubs &amp; late night fun!</p>
+            <p style={{color:'rgba(245,230,200,0.45)'}}>Your phone is your gamepad — no Bluetooth needed! 📱</p>
             <button
               onClick={() => navigate('/stats')}
-              className="text-amber-400 hover:text-amber-300 underline underline-offset-4"
+              className="underline underline-offset-4 transition"
+              style={{color:'rgba(212,160,23,0.7)', background:'none', border:'none', cursor:'pointer'}}
             >
               📊 View Your Stats &amp; History
             </button>
