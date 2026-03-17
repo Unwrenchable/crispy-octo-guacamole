@@ -233,6 +233,15 @@ function Home() {
             >
               📊 View Your Stats &amp; History
             </button>
+            <div className="mt-2">
+              <button
+                onClick={() => navigate('/admin')}
+                className="underline underline-offset-4 transition text-xs"
+                style={{color:'rgba(245,230,200,0.3)', background:'none', border:'none', cursor:'pointer'}}
+              >
+                ⚙️ Admin
+              </button>
+            </div>
           </div>
         </div>
       </div>

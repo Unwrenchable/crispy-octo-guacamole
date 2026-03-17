@@ -15,7 +15,8 @@ function HostLobby() {
     options: ['', '', '', ''],
     correctAnswer: 0,
     timeLimit: 30,
-    category: 'General'
+    category: 'General',
+    imageUrl: ''
   });
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const [gameMode, setGameMode] = useState('classic');
@@ -24,6 +25,12 @@ function HostLobby() {
   const [loadCount, setLoadCount] = useState(20);
   const [poolSize, setPoolSize] = useState(null);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
+  const [showScoringConfig, setShowScoringConfig] = useState(false);
+  const [scoringConfig, setScoringConfig] = useState({
+    basePoints: 100,
+    timeBonusEnabled: true,
+    timeBonusMax: 50
+  });
 
   const hostName = location.state?.hostName || 'Host';
   const passedGameMode = location.state?.gameMode || 'classic';
@@ -47,7 +54,7 @@ function HostLobby() {
         setPin(response.pin);
         setGameId(response.gameId);
       }
-    });
+    }, scoringConfig);
 
     socketService.onTeamJoined((data) => {
       setTeams(prev => [...prev, { id: data.teamId, name: data.teamName }]);
@@ -57,9 +64,7 @@ function HostLobby() {
       setTeams(prev => prev.filter(team => team.id !== data.teamId));
     });
 
-    return () => {
-      socket.disconnect();
-    };
+    return () => { socket.disconnect(); };
   }, [hostName, gameMode, genre]);
 
   const handleLoadQuestions = () => {
@@ -107,10 +112,10 @@ function HostLobby() {
       return;
     }
 
-    // correctAnswer is stored as an index; convert to the actual option text before sending
     const questionToAdd = {
       ...newQuestion,
       correctAnswer: newQuestion.options[newQuestion.correctAnswer],
+      imageUrl: newQuestion.imageUrl || undefined
     };
 
     socketService.addQuestion(pin, questionToAdd, (response) => {
@@ -121,7 +126,8 @@ function HostLobby() {
           options: ['', '', '', ''],
           correctAnswer: 0,
           timeLimit: 30,
-          category: 'General'
+          category: 'General',
+          imageUrl: ''
         });
         setShowAddQuestion(false);
       }
@@ -163,9 +169,7 @@ function HostLobby() {
 
     socketService.startGame(pin, (response) => {
       if (response.success) {
-        navigate('/host/game', {
-          state: { pin, gameId, teams, questions }
-        });
+        navigate('/host/game', { state: { pin, gameId, teams, questions } });
       }
     });
   };
@@ -182,13 +186,9 @@ function HostLobby() {
             <h1 className="text-4xl font-bold text-white mb-2">{modeIcon} {modeName} Lobby</h1>
             <p className="text-gray-400">Host: <span className="text-yellow-400 font-semibold">{hostName}</span></p>
             <div className="flex justify-center gap-4 mt-2">
-              <span className="px-3 py-1 bg-purple-800 text-purple-300 rounded-full text-sm font-medium">
-                Mode: {gameMode}
-              </span>
+              <span className="px-3 py-1 bg-purple-800 text-purple-300 rounded-full text-sm font-medium">Mode: {gameMode}</span>
               {!isPartyGame && (
-                <span className="px-3 py-1 bg-blue-800 text-blue-300 rounded-full text-sm font-medium">
-                  Genre: {genre}
-                </span>
+                <span className="px-3 py-1 bg-blue-800 text-blue-300 rounded-full text-sm font-medium">Genre: {genre}</span>
               )}
             </div>
           </div>
@@ -207,6 +207,72 @@ function HostLobby() {
             </div>
           )}
 
+          {/* Scoring Rules (trivia only) */}
+          {!isPartyGame && (
+            <div className="mb-6 bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+              <button
+                onClick={() => setShowScoringConfig(!showScoringConfig)}
+                className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-750 transition"
+              >
+                <span className="text-white font-semibold text-lg">⚙️ Scoring Rules</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-400 text-sm">
+                    {scoringConfig.basePoints}pts base{scoringConfig.timeBonusEnabled ? ` + up to ${scoringConfig.timeBonusMax}pts bonus` : ', no time bonus'}
+                  </span>
+                  <span className="text-amber-400">{showScoringConfig ? '▲' : '▼'}</span>
+                </div>
+              </button>
+              {showScoringConfig && (
+                <div className="px-5 pb-5 border-t border-gray-700 pt-4 space-y-4">
+                  {/* Base Points */}
+                  <div>
+                    <label className="block text-gray-300 font-medium mb-2">
+                      Base Points per correct answer: <span className="text-amber-400 font-bold">{scoringConfig.basePoints}</span>
+                    </label>
+                    <input
+                      type="range"
+                      min={50} max={500} step={50}
+                      value={scoringConfig.basePoints}
+                      onChange={(e) => setScoringConfig(prev => ({ ...prev, basePoints: Number(e.target.value) }))}
+                      className="w-full accent-amber-500"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>50</span><span>500</span>
+                    </div>
+                  </div>
+                  {/* Time Bonus Toggle */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setScoringConfig(prev => ({ ...prev, timeBonusEnabled: !prev.timeBonusEnabled }))}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${scoringConfig.timeBonusEnabled ? 'bg-amber-500' : 'bg-gray-600'}`}
+                    >
+                      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${scoringConfig.timeBonusEnabled ? 'left-7' : 'left-1'}`} />
+                    </button>
+                    <label className="text-gray-300 font-medium">Time Bonus</label>
+                  </div>
+                  {/* Max Time Bonus slider */}
+                  {scoringConfig.timeBonusEnabled && (
+                    <div>
+                      <label className="block text-gray-300 font-medium mb-2">
+                        Max Time Bonus: <span className="text-amber-400 font-bold">{scoringConfig.timeBonusMax}</span> pts
+                      </label>
+                      <input
+                        type="range"
+                        min={0} max={100} step={10}
+                        value={scoringConfig.timeBonusMax}
+                        onChange={(e) => setScoringConfig(prev => ({ ...prev, timeBonusMax: Number(e.target.value) }))}
+                        className="w-full accent-amber-500"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>0</span><span>100</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Quick Load Questions (trivia only) */}
           {!isPartyGame && (
             <div className="mb-6 bg-gray-800 rounded-xl p-5 border border-gray-700">
@@ -219,9 +285,7 @@ function HostLobby() {
                         key={n}
                         onClick={() => setLoadCount(n)}
                         className={`px-4 py-2 rounded-lg font-bold text-sm transition ${
-                          loadCount === n
-                            ? 'bg-amber-500 text-black'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          loadCount === n ? 'bg-amber-500 text-black' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                         }`}
                       >
                         {n}
@@ -278,14 +342,10 @@ function HostLobby() {
 
             {/* Teams List */}
             <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-              <h2 className="text-2xl font-bold text-white mb-4">
-                Players ({teams.length})
-              </h2>
+              <h2 className="text-2xl font-bold text-white mb-4">Players ({teams.length})</h2>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {teams.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
-                    Waiting for players to join...
-                  </p>
+                  <p className="text-gray-500 text-center py-8">Waiting for players to join...</p>
                 ) : (
                   teams.map((team, index) => (
                     <div key={team.id} className="bg-gray-700 p-4 rounded-lg flex items-center gap-3">
@@ -302,9 +362,7 @@ function HostLobby() {
           {!isPartyGame && (
             <div className="bg-gray-800 rounded-xl p-6 mb-6 border border-gray-700">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">
-                  Questions ({questions.length})
-                </h2>
+                <h2 className="text-2xl font-bold text-white">Questions ({questions.length})</h2>
                 <button
                   onClick={() => setShowAddQuestion(!showAddQuestion)}
                   className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg"
@@ -322,7 +380,7 @@ function HostLobby() {
                     onChange={(e) => setNewQuestion({ ...newQuestion, text: e.target.value })}
                     className="w-full px-4 py-2 rounded-lg bg-gray-800 border-2 border-gray-600 text-white focus:border-green-500 focus:outline-none mb-3"
                   />
-                  
+
                   {newQuestion.options.map((option, index) => (
                     <div key={index} className="flex items-center mb-2">
                       <input
@@ -362,6 +420,20 @@ function HostLobby() {
                     />
                   </div>
 
+                  {/* Image URL field */}
+                  <div className="mt-3">
+                    <input
+                      type="url"
+                      placeholder="Image URL (optional) — e.g. https://example.com/img.jpg"
+                      value={newQuestion.imageUrl}
+                      onChange={(e) => setNewQuestion({ ...newQuestion, imageUrl: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg bg-gray-800 border-2 border-gray-600 text-white focus:border-green-500 focus:outline-none"
+                    />
+                    {newQuestion.imageUrl && (
+                      <img src={newQuestion.imageUrl} alt="Preview" className="mt-2 max-h-24 object-contain rounded" onError={(e) => { e.target.style.display = 'none'; }} />
+                    )}
+                  </div>
+
                   <button
                     onClick={handleAddQuestion}
                     className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg"
@@ -375,7 +447,7 @@ function HostLobby() {
                 {questions.map((q, index) => (
                   <div key={index} className="bg-gray-900 p-3 rounded-lg border border-gray-700">
                     <div className="font-semibold text-white text-sm">
-                      {index + 1}. {q.text}
+                      {index + 1}. {q.text || '(loaded question)'}
                     </div>
                   </div>
                 ))}
@@ -406,4 +478,3 @@ function HostLobby() {
 }
 
 export default HostLobby;
-

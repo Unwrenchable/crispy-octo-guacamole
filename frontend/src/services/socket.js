@@ -43,8 +43,8 @@ class SocketService {
   }
 
   // Host events
-  createGame(hostName, gameMode, genre, callback) {
-    this.socket.emit('host:create-game', { hostName, gameMode, genre }, callback);
+  createGame(hostName, gameMode, genre, callback, scoringConfig) {
+    this.socket.emit('host:create-game', { hostName, gameMode, genre, scoringConfig }, callback);
   }
 
   loadQuestions(pin, count, callback) {
@@ -232,6 +232,15 @@ class SocketService {
   // Remove listeners
   removeListener(event, callback) {
     this.socket.off(event, callback);
+  }
+
+  // Emoji reactions
+  sendReaction(pin, teamId, emoji) {
+    this.socket.emit('team:reaction', { pin, teamId, emoji });
+  }
+
+  onReaction(callback) {
+    this.socket.on('game:reaction', callback);
   }
 }
 
