@@ -23,30 +23,32 @@ function PlayerGame() {
   const [timeLeft, setTimeLeft] = useState(null);
   const timerRef = useRef(null);
 
-  // Countdown timer: starts when a new question arrives
+  // Countdown timer: starts on new question, stops when results are shown
   useEffect(() => {
-    if (!currentQuestion || showResults) return;
-    if (timerRef.current) clearInterval(timerRef.current);
+    // Clear any existing timer first using a local reference to avoid races
+    const existingId = timerRef.current;
+    if (existingId) clearInterval(existingId);
+    timerRef.current = null;
+
+    if (!currentQuestion || showResults) {
+      setTimeLeft(null);
+      return;
+    }
+
     setTimeLeft(currentQuestion.timeLimit);
-    timerRef.current = setInterval(() => {
+    const id = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
-          clearInterval(timerRef.current);
+          clearInterval(id);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timerRef.current);
-  }, [currentQuestion]);
+    timerRef.current = id;
 
-  // Stop timer when results are shown
-  useEffect(() => {
-    if (showResults && timerRef.current) {
-      clearInterval(timerRef.current);
-      setTimeLeft(null);
-    }
-  }, [showResults]);
+    return () => clearInterval(id);
+  }, [currentQuestion, showResults]);
 
   useEffect(() => {
     if (!pin || !teamId) {

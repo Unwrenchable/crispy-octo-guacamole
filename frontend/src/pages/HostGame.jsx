@@ -17,30 +17,32 @@ function HostGame() {
   const [timeLeft, setTimeLeft] = useState(null);
   const timerRef = useRef(null);
 
-  // Countdown timer — starts whenever a new question is set
+  // Countdown timer — starts on new question, stops when answer is revealed
   useEffect(() => {
-    if (!currentQuestion || showAnswer) return;
-    if (timerRef.current) clearInterval(timerRef.current);
+    // Clear any existing timer first using a local reference to avoid races
+    const existingId = timerRef.current;
+    if (existingId) clearInterval(existingId);
+    timerRef.current = null;
+
+    if (!currentQuestion || showAnswer) {
+      setTimeLeft(null);
+      return;
+    }
+
     setTimeLeft(currentQuestion.timeLimit);
-    timerRef.current = setInterval(() => {
+    const id = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
-          clearInterval(timerRef.current);
+          clearInterval(id);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timerRef.current);
-  }, [currentQuestion]);
+    timerRef.current = id;
 
-  // Stop timer when answer is revealed
-  useEffect(() => {
-    if (showAnswer && timerRef.current) {
-      clearInterval(timerRef.current);
-      setTimeLeft(null);
-    }
-  }, [showAnswer]);
+    return () => clearInterval(id);
+  }, [currentQuestion, showAnswer]);
 
   useEffect(() => {
     if (!pin) {
