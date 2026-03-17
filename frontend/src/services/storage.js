@@ -9,12 +9,12 @@ export const REWARDS_TIERS = [
 ];
 
 export const REWARDS_CATALOG = [
-  { id: 'free_ball',    name: 'Free Ball at Putters',    cost: 75,  icon: '⛳', description: 'One free round of mini golf at Putters Las Vegas', category: 'activity' },
-  { id: 'discount_15',  name: '15% Off Next Visit',      cost: 100, icon: '🏷️', description: '15% discount on your next visit to Putters', category: 'discount' },
-  { id: 'free_drink',   name: 'Free Soft Drink',         cost: 150, icon: '🥤', description: 'One complimentary non-alcoholic drink', category: 'drink' },
+  { id: 'free_pool',    name: 'Free Pool Game',          cost: 75,  icon: '🎱', description: 'One free game of pool at Putters — any table, any time', category: 'activity' },
+  { id: 'free_beer',    name: 'Free Draft Beer',         cost: 100, icon: '🍺', description: 'One complimentary draft beer (21+ only)', category: 'drink' },
+  { id: 'discount_15',  name: '15% Off Food Order',      cost: 150, icon: '🏷️', description: '15% off your food order at Putters', category: 'discount' },
   { id: 'free_cocktail',name: 'Free Cocktail',           cost: 250, icon: '🍹', description: 'One complimentary cocktail (21+ only)', category: 'drink' },
-  { id: 'vip_table',    name: 'VIP Table for 2 Hours',   cost: 400, icon: '🎪', description: 'Reserved VIP seating for 2 hours', category: 'experience' },
-  { id: 'vip_night',    name: 'VIP Night Package',       cost: 600, icon: '🎉', description: 'VIP experience for up to 4 people including drinks', category: 'experience' },
+  { id: 'vip_table',    name: 'VIP Pool Table 2 Hours',  cost: 400, icon: '🎱', description: 'Reserved pool table for 2 hours — bring your crew', category: 'experience' },
+  { id: 'vip_night',    name: 'VIP Night Package',       cost: 600, icon: '🎉', description: 'VIP experience for up to 4 people — drinks & pool included', category: 'experience' },
 ];
 
 export const POINTS_EVENTS = {

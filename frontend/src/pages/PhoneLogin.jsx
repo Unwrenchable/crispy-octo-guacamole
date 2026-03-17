@@ -83,20 +83,20 @@ function PhoneLogin() {
   // ── Step: Phone ──────────────────────────────────────────────
   if (step === 'phone') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-orange-700 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black flex items-center justify-center p-4 relative overflow-hidden">
         <BgStars />
         <div className="max-w-md w-full relative z-10">
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30">
+          <div className="bg-black/50 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-amber-500/30">
             <div className="text-center mb-8">
-              <div className="text-6xl mb-3">🎰</div>
+              <div className="text-6xl mb-3">🎱</div>
               <h1 className="text-4xl font-bold text-white mb-1">Putters Rewards</h1>
-              <p className="text-yellow-300 text-lg">Enter your phone to earn Putters Points!</p>
+              <p className="text-amber-400 text-lg">Enter your phone to earn Putters Points!</p>
               <p className="text-white/50 text-sm mt-2">Your number stays private — just for your rewards</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-yellow-300 mb-2">Phone Number</label>
+                <label className="block text-sm font-semibold text-amber-400 mb-2">Phone Number</label>
                 <input
                   type="tel"
                   inputMode="numeric"
@@ -104,7 +104,7 @@ function PhoneLogin() {
                   value={formatPhoneInput(rawDigits)}
                   onChange={handlePhoneInput}
                   onKeyDown={(e) => handleKeyDown(e, handlePhoneNext)}
-                  className="w-full px-4 py-4 text-2xl text-center rounded-xl border-2 border-yellow-400 bg-white/20 text-white placeholder-white/40 focus:border-yellow-300 focus:ring-2 focus:ring-yellow-200/40 focus:outline-none tracking-wider font-bold transition-all duration-200"
+                  className="w-full px-4 py-4 text-2xl text-center rounded-xl border-2 border-amber-500 bg-white/10 text-white placeholder-white/30 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none tracking-wider font-bold transition-all duration-200"
                   autoFocus
                 />
               </div>
@@ -114,14 +114,14 @@ function PhoneLogin() {
               <button
                 onClick={handlePhoneNext}
                 disabled={rawDigits.length < 10}
-                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 hover:from-yellow-300 hover:to-orange-400 hover:shadow-xl shadow-lg text-xl uppercase tracking-wide"
+                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-amber-500 to-amber-600 text-black hover:from-amber-400 hover:to-amber-500 hover:shadow-xl shadow-lg text-xl uppercase tracking-wide"
               >
                 Continue →
               </button>
 
               <button
                 onClick={() => navigate(returnTo)}
-                className="w-full border-2 border-white/30 bg-white/10 text-white/70 font-semibold py-3 px-6 rounded-xl hover:border-yellow-400 hover:text-yellow-300 transition"
+                className="w-full border-2 border-white/20 bg-white/5 text-white/60 font-semibold py-3 px-6 rounded-xl hover:border-amber-500 hover:text-amber-400 transition"
               >
                 Skip for now
               </button>
@@ -137,21 +137,21 @@ function PhoneLogin() {
   // ── Step: Name ───────────────────────────────────────────────
   if (step === 'name') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-orange-700 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black flex items-center justify-center p-4 relative overflow-hidden">
         <BgStars />
         <div className="max-w-md w-full relative z-10">
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30">
+          <div className="bg-black/50 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-amber-500/30">
             <div className="text-center mb-6">
               <div className="text-5xl mb-2">{existingProfile ? '👋' : '✨'}</div>
               <h2 className="text-3xl font-bold text-white mb-1">
                 {existingProfile ? `Welcome back!` : 'Create your profile'}
               </h2>
               {existingProfile ? (
-                <p className="text-yellow-300">
+                <p className="text-amber-400">
                   {existingProfile.displayName} · <span className="font-bold">{existingProfile.points} PP</span>
                 </p>
               ) : (
-                <p className="text-yellow-300 text-sm">
+                <p className="text-amber-400 text-sm">
                   You'll earn <strong>+20 Putters Points</strong> just for signing up! 🎉
                 </p>
               )}
@@ -160,7 +160,7 @@ function PhoneLogin() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-yellow-300 mb-2">
+                <label className="block text-sm font-semibold text-amber-400 mb-2">
                   {existingProfile ? 'Your Name' : 'What should we call you?'}
                 </label>
                 <input
@@ -170,7 +170,7 @@ function PhoneLogin() {
                   onChange={(e) => { setDisplayName(e.target.value); setError(''); }}
                   onKeyDown={(e) => handleKeyDown(e, handleLogin)}
                   maxLength={24}
-                  className="w-full px-4 py-3 text-xl text-center rounded-xl border-2 border-yellow-400 bg-white/20 text-white placeholder-white/40 focus:border-yellow-300 focus:ring-2 focus:ring-yellow-200/40 focus:outline-none transition-all duration-200"
+                  className="w-full px-4 py-3 text-xl text-center rounded-xl border-2 border-amber-500 bg-white/10 text-white placeholder-white/30 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all duration-200"
                   autoFocus
                 />
               </div>
@@ -180,14 +180,14 @@ function PhoneLogin() {
               <button
                 onClick={handleLogin}
                 disabled={loading || !displayName.trim()}
-                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 hover:from-yellow-300 hover:to-orange-400 hover:shadow-xl shadow-lg text-xl uppercase tracking-wide"
+                className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-amber-500 to-amber-600 text-black hover:from-amber-400 hover:to-amber-500 hover:shadow-xl shadow-lg text-xl uppercase tracking-wide"
               >
-                {loading ? 'Loading...' : existingProfile ? "Let's Play! 🎰" : 'Join Rewards 🎉'}
+                {loading ? 'Loading...' : existingProfile ? "Let's Play! 🎱" : 'Join Rewards 🎉'}
               </button>
 
               <button
                 onClick={() => { setStep('phone'); setError(''); }}
-                className="w-full border-2 border-white/30 bg-white/10 text-white/70 font-semibold py-2 px-6 rounded-xl hover:border-yellow-400 hover:text-yellow-300 transition text-sm"
+                className="w-full border-2 border-white/20 bg-white/5 text-white/60 font-semibold py-2 px-6 rounded-xl hover:border-amber-500 hover:text-amber-400 transition text-sm"
               >
                 ← Change number
               </button>
@@ -200,16 +200,16 @@ function PhoneLogin() {
 
   // ── Step: Done ───────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-orange-700 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30 text-center">
-          <div className="text-6xl mb-4">{existingProfile ? '🎰' : '🎉'}</div>
+        <div className="bg-black/50 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-amber-500/30 text-center">
+          <div className="text-6xl mb-4">{existingProfile ? '🎱' : '🎉'}</div>
           <h2 className="text-3xl font-bold text-white mb-2">
             {existingProfile ? `Welcome back, ${displayName}!` : `You're in, ${displayName}!`}
           </h2>
           {awarded && (
-            <div className="bg-yellow-400/20 border-2 border-yellow-400 rounded-xl p-4 mt-4">
-              <p className="text-yellow-300 font-bold text-lg">+{awarded.points} Putters Points! 🎁</p>
+            <div className="bg-amber-500/20 border-2 border-amber-500 rounded-xl p-4 mt-4">
+              <p className="text-amber-400 font-bold text-lg">+{awarded.points} Putters Points! 🎁</p>
               <p className="text-white/70 text-sm">{awarded.label}</p>
             </div>
           )}
@@ -226,7 +226,7 @@ function BgStars() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(10)].map((_, i) => (
-        <div key={i} className="absolute text-yellow-300 text-2xl opacity-20" style={{
+        <div key={i} className="absolute text-amber-500 text-2xl opacity-10" style={{
           left: `${(i * 91 + 5) % 95}%`,
           top: `${(i * 67 + 11) % 90}%`,
           animationDelay: `${i * 0.4}s`
@@ -246,17 +246,17 @@ function ErrorMsg({ msg }) {
 
 function RewardsTeaserList() {
   return (
-    <div className="mt-6 pt-6 border-t border-white/20">
-      <p className="text-yellow-300 font-semibold text-sm text-center mb-3">🎁 Earn Putters Points & unlock perks:</p>
+    <div className="mt-6 pt-6 border-t border-white/10">
+      <p className="text-amber-400 font-semibold text-sm text-center mb-3">🎁 Earn Putters Points & unlock perks:</p>
       <div className="space-y-2">
         {[
-          { icon: '⛳', label: 'Free ball at Putters', pts: '75 PP' },
-          { icon: '🍹', label: 'Free cocktail',         pts: '250 PP' },
-          { icon: '🎉', label: 'VIP Night Package',     pts: '600 PP' },
+          { icon: '🎱', label: 'Free pool game at Putters', pts: '75 PP' },
+          { icon: '🍹', label: 'Free cocktail',              pts: '250 PP' },
+          { icon: '🎉', label: 'VIP Night Package',          pts: '600 PP' },
         ].map(r => (
-          <div key={r.label} className="flex justify-between text-sm text-white/70">
+          <div key={r.label} className="flex justify-between text-sm text-white/60">
             <span>{r.icon} {r.label}</span>
-            <span className="text-yellow-400 font-semibold">{r.pts}</span>
+            <span className="text-amber-400 font-semibold">{r.pts}</span>
           </div>
         ))}
       </div>

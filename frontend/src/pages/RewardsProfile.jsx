@@ -54,7 +54,7 @@ function RewardsProfile() {
     : 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-orange-700 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black p-4">
       {/* Redemption modal */}
       {redeemMsg && (
         <RedemptionModal
@@ -68,7 +68,7 @@ function RewardsProfile() {
         <div className="flex justify-between items-center mb-4">
           <button
             onClick={() => navigate('/')}
-            className="text-white/70 hover:text-yellow-300 font-semibold flex items-center gap-1 transition"
+            className="text-white/70 hover:text-amber-400 font-semibold flex items-center gap-1 transition"
           >
             ← Back
           </button>
@@ -81,7 +81,7 @@ function RewardsProfile() {
         </div>
 
         {/* Profile card */}
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-6 border border-white/30 mb-4">
+        <div className="bg-black/60 backdrop-blur-md rounded-3xl shadow-2xl p-6 border border-amber-500/20 mb-4">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-white">{profile.displayName}</h1>
@@ -94,8 +94,8 @@ function RewardsProfile() {
           </div>
 
           {/* Points balance */}
-          <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 border border-yellow-400/40 rounded-2xl p-4 mb-4 text-center">
-            <div className="text-5xl font-black text-yellow-400">{profile.points}</div>
+          <div className="bg-gradient-to-r from-amber-500/20 to-green-800/20 border border-amber-500/40 rounded-2xl p-4 mb-4 text-center">
+            <div className="text-5xl font-black text-amber-400">{profile.points}</div>
             <div className="text-white/70 text-sm mt-1">Putters Points</div>
             <div className="text-white/50 text-xs mt-1">{profile.totalPointsEarned || profile.points} total earned · {profile.gamesPlayed || 0} games played</div>
           </div>
@@ -107,16 +107,16 @@ function RewardsProfile() {
                 <span>{tier.icon} {tier.name}</span>
                 <span>{nextTier.icon} {nextTier.name} in {pointsToNext} PP</span>
               </div>
-              <div className="bg-white/20 rounded-full h-3 overflow-hidden">
+              <div className="bg-white/10 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-yellow-400 to-orange-400 h-3 rounded-full transition-all duration-700"
+                  className="bg-gradient-to-r from-amber-500 to-amber-400 h-3 rounded-full transition-all duration-700"
                   style={{ width: `${Math.min(tierProgress, 100)}%` }}
                 />
               </div>
             </div>
           ) : (
             <div className="text-center">
-              <span className="text-yellow-400 font-bold text-sm">👑 Maximum tier reached! You're a Legend!</span>
+              <span className="text-amber-400 font-bold text-sm">👑 Maximum tier reached! You're a Legend!</span>
             </div>
           )}
 
@@ -127,7 +127,7 @@ function RewardsProfile() {
               { label: 'Wins',  value: profile.gamesWon || 0,   icon: '🏆' },
               { label: 'Earned',value: profile.totalPointsEarned || profile.points, icon: '⭐' },
             ].map(s => (
-              <div key={s.label} className="bg-white/10 rounded-xl p-3 text-center border border-white/20">
+              <div key={s.label} className="bg-white/5 rounded-xl p-3 text-center border border-white/10">
                 <div className="text-xl">{s.icon}</div>
                 <div className="text-xl font-bold text-white">{s.value}</div>
                 <div className="text-xs text-white/50">{s.label}</div>
@@ -148,8 +148,8 @@ function RewardsProfile() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 py-2 rounded-xl font-semibold text-sm transition-all ${
                 activeTab === tab.id
-                  ? 'bg-yellow-400 text-purple-900'
-                  : 'bg-white/10 text-white/70 hover:bg-white/20'
+                  ? 'bg-amber-500 text-black'
+                  : 'bg-white/5 text-white/70 hover:bg-white/10'
               }`}
             >
               {tab.icon} {tab.label}
@@ -160,8 +160,8 @@ function RewardsProfile() {
         {/* Rewards catalog */}
         {activeTab === 'rewards' && (
           <div className="space-y-3">
-            <p className="text-white/60 text-sm text-center mb-2">
-              Show your redemption code to staff to claim your perk 🎉
+            <p className="text-white/50 text-sm text-center mb-2">
+              Show your redemption code to Putters staff to claim your perk 🎉
             </p>
             {REWARDS_CATALOG.map(reward => {
               const canAfford = profile.points >= reward.cost;
@@ -171,8 +171,8 @@ function RewardsProfile() {
                   key={reward.id}
                   className={`rounded-2xl p-4 border-2 transition-all ${
                     canAfford
-                      ? 'bg-white/10 border-yellow-400/50 hover:border-yellow-400'
-                      : 'bg-white/5 border-white/20 opacity-70'
+                      ? 'bg-white/5 border-amber-500/50 hover:border-amber-500'
+                      : 'bg-white/5 border-white/10 opacity-60'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -180,16 +180,16 @@ function RewardsProfile() {
                       <span className="text-3xl">{reward.icon}</span>
                       <div>
                         <div className="font-bold text-white text-sm">{reward.name}</div>
-                        <div className="text-white/60 text-xs mt-0.5">{reward.description}</div>
+                        <div className="text-white/50 text-xs mt-0.5">{reward.description}</div>
                       </div>
                     </div>
                     <div className="text-right flex-shrink-0 ml-3">
-                      <div className="text-yellow-400 font-black text-lg">{reward.cost} PP</div>
+                      <div className="text-amber-400 font-black text-lg">{reward.cost} PP</div>
                       {canAfford ? (
                         <button
                           onClick={() => handleRedeem(reward)}
                           disabled={isRedeeming}
-                          className="mt-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 font-bold text-xs py-1.5 px-3 rounded-lg hover:from-yellow-300 hover:to-orange-400 disabled:opacity-50 transition"
+                          className="mt-1 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-xs py-1.5 px-3 rounded-lg hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 transition"
                         >
                           {isRedeeming ? '...' : 'Redeem'}
                         </button>
@@ -203,10 +203,10 @@ function RewardsProfile() {
             })}
 
             {/* Tier benefits info */}
-            <div className="bg-white/10 rounded-2xl p-4 border border-white/20 mt-4">
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10 mt-4">
               <h3 className="text-white font-bold mb-3">✨ Membership Tiers</h3>
               {REWARDS_TIERS.map(t => (
-                <div key={t.id} className={`flex items-center justify-between py-2 px-3 rounded-lg mb-1 ${tier.id === t.id ? 'bg-yellow-400/20 border border-yellow-400/40' : ''}`}>
+                <div key={t.id} className={`flex items-center justify-between py-2 px-3 rounded-lg mb-1 ${tier.id === t.id ? 'bg-amber-500/20 border border-amber-500/40' : ''}`}>
                   <span className={`font-semibold text-sm ${t.color}`}>{t.icon} {t.name}</span>
                   <span className="text-white/50 text-xs">{t.minPoints}+ PP{tier.id === t.id ? ' · Current' : ''}</span>
                 </div>
@@ -217,8 +217,8 @@ function RewardsProfile() {
 
         {/* Points history */}
         {activeTab === 'history' && (
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 overflow-hidden">
-            <div className="p-4 border-b border-white/20">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
+            <div className="p-4 border-b border-white/10">
               <h2 className="text-white font-bold">Points History</h2>
             </div>
             {(!profile.pointsHistory || profile.pointsHistory.length === 0) ? (
@@ -248,26 +248,26 @@ function RewardsProfile() {
         {activeTab === 'redemptions' && (
           <div className="space-y-3">
             {(!profile.redemptions || profile.redemptions.length === 0) ? (
-              <div className="bg-white/10 rounded-2xl p-8 text-center border border-white/20">
+              <div className="bg-black/40 rounded-2xl p-8 text-center border border-white/10">
                 <div className="text-4xl mb-2">🎟️</div>
                 <p className="text-white/60">No redemptions yet. Spend your Putters Points on awesome perks!</p>
               </div>
             ) : (
               profile.redemptions.map((r) => (
-                <div key={r.id} className="bg-white/10 rounded-2xl p-4 border border-white/20">
+                <div key={r.id} className="bg-black/40 rounded-2xl p-4 border border-white/10">
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="text-white font-bold">{r.rewardName}</div>
                       <div className="text-white/50 text-xs mt-1">{new Date(r.timestamp).toLocaleDateString()}</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-yellow-400 font-black tracking-widest text-lg">{r.redemptionCode}</div>
+                      <div className="text-amber-400 font-black tracking-widest text-lg">{r.redemptionCode}</div>
                       <div className="text-white/40 text-xs">{r.cost} PP spent</div>
                     </div>
                   </div>
                   <div className="mt-3 bg-white/5 rounded-xl p-3 text-center">
                     <p className="text-white/60 text-xs">Show this code to Putters staff to redeem</p>
-                    <p className="text-yellow-400 font-mono text-xl font-bold tracking-[0.3em] mt-1">{r.redemptionCode}</p>
+                    <p className="text-amber-400 font-mono text-xl font-bold tracking-[0.3em] mt-1">{r.redemptionCode}</p>
                   </div>
                 </div>
               ))
@@ -279,9 +279,9 @@ function RewardsProfile() {
         <div className="mt-6 text-center space-y-2">
           <button
             onClick={() => navigate('/join')}
-            className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 font-bold py-3 px-6 rounded-xl text-lg uppercase tracking-wide hover:from-yellow-300 hover:to-orange-400 transition shadow-lg"
+            className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold py-3 px-6 rounded-xl text-lg uppercase tracking-wide hover:from-amber-400 hover:to-amber-500 transition shadow-lg"
           >
-            Play a Game & Earn More Points 🎮
+            Play a Game &amp; Earn More Points 🎱
           </button>
         </div>
       </div>
@@ -306,20 +306,20 @@ function RedemptionModal({ msg, onClose }) {
   const { reward, redemption } = msg;
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-2xl p-8 max-w-sm w-full text-center border-2 border-yellow-400">
+      <div className="bg-gray-900 rounded-2xl p-8 max-w-sm w-full text-center border-2 border-amber-500">
         <div className="text-5xl mb-3">{reward.icon}</div>
         <h2 className="text-2xl font-bold text-white mb-1">Reward Redeemed!</h2>
-        <p className="text-yellow-300 font-semibold mb-2">{reward.name}</p>
+        <p className="text-amber-400 font-semibold mb-2">{reward.name}</p>
         <p className="text-white/60 text-sm mb-6">{reward.description}</p>
 
-        <div className="bg-yellow-400/10 border-2 border-yellow-400 rounded-2xl p-4 mb-6">
+        <div className="bg-amber-500/10 border-2 border-amber-500 rounded-2xl p-4 mb-6">
           <p className="text-white/60 text-xs mb-2">Show this code to Putters staff:</p>
-          <p className="text-yellow-400 font-mono text-3xl font-black tracking-[0.3em]">{redemption.redemptionCode}</p>
+          <p className="text-amber-400 font-mono text-3xl font-black tracking-[0.3em]">{redemption.redemptionCode}</p>
         </div>
 
         <button
           onClick={onClose}
-          className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-purple-900 font-bold py-3 px-6 rounded-xl text-lg"
+          className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold py-3 px-6 rounded-xl text-lg"
         >
           Got it! 🎉
         </button>
