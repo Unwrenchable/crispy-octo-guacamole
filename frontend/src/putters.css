@@ -1,0 +1,475 @@
+/* ============================================================
+   PUTTERS VEGAS — Custom Bar Theme
+   Bets, Brews & Billiards | Las Vegas
+   ============================================================ */
+
+/* ── Brand Design Tokens ───────────────────────────────────── */
+:root {
+  --pv-felt:          #1a3d2b;
+  --pv-felt-mid:      #245c3e;
+  --pv-felt-dark:     #0d2318;
+  --pv-black:         #050f09;
+  --pv-gold:          #d4a017;
+  --pv-gold-light:    #f5c842;
+  --pv-gold-bright:   #ffe082;
+  --pv-gold-dark:     #a07810;
+  --pv-amber:         #f59e0b;
+  --pv-cream:         #f5e6c8;
+  --pv-wood:          #2c1810;
+  --pv-neon-green:    #00e87a;
+  --pv-neon-gold:     #ffd700;
+  --pv-shadow-dark:   rgba(0, 0, 0, 0.7);
+  --pv-shadow-gold:   rgba(212, 160, 23, 0.35);
+  --pv-border-gold:   rgba(212, 160, 23, 0.28);
+  --pv-border-felt:   rgba(36, 92, 62, 0.5);
+}
+
+/* ── Base — Dark Bar Background ───────────────────────────── */
+html {
+  background: #050f09;
+}
+
+body {
+  background: radial-gradient(ellipse 120% 80% at 50% 0%,   #1a3d2b 0%,   #0d2318 40%,   #050f09 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #f5e6c8;
+}
+
+/* Subtle felt-weave texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg,   transparent, transparent 3px,   rgba(0, 0, 0, 0.05) 3px, rgba(0, 0, 0, 0.05) 4px),
+    repeating-linear-gradient(90deg,  transparent, transparent 3px,   rgba(0, 0, 0, 0.05) 3px, rgba(0, 0, 0, 0.05) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Page wrapper — ensure content sits above texture ──────── */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Gold gradient headings ────────────────────────────────── */
+h1, h2 {
+  font-family: 'Poppins', sans-serif;
+}
+
+.pv-title {
+  background: linear-gradient(135deg, var(--pv-gold-bright) 0%, var(--pv-gold) 50%, var(--pv-gold-bright) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(212, 160, 23, 0.45));
+  animation: pv-shimmer-text 4s linear infinite;
+}
+
+/* ── Cards / Panels ────────────────────────────────────────── */
+.pv-card {
+  background: linear-gradient(145deg, rgba(15, 38, 25, 0.97) 0%, rgba(8, 20, 14, 0.98) 100%);
+  border: 1px solid var(--pv-border-gold);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 1px rgba(212, 160, 23, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.65),
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(212, 160, 23, 0.12);
+}
+
+/* Felt-toned section inside a card */
+.pv-felt-section {
+  background: radial-gradient(ellipse at 50% 0%, rgba(36, 92, 62, 0.35) 0%, rgba(15, 38, 25, 0.5) 100%);
+  border: 1px solid var(--pv-border-felt);
+  border-radius: 12px;
+}
+
+/* Points / score highlight box */
+.pv-points-box {
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.18) 0%, rgba(36, 92, 62, 0.25) 100%);
+  border: 1.5px solid rgba(212, 160, 23, 0.45);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(212, 160, 23, 0.12), inset 0 1px 0 rgba(212, 160, 23, 0.2);
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+
+/* Primary — Brass gold CTA */
+.pv-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  user-select: none;
+}
+
+.pv-btn-gold {
+  background: linear-gradient(135deg, var(--pv-gold-dark) 0%, var(--pv-gold-light) 50%, var(--pv-gold-dark) 100%);
+  background-size: 200% auto;
+  color: #0a1f12;
+  box-shadow:
+    0 4px 20px rgba(212, 160, 23, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.pv-btn-gold:hover:not(:disabled) {
+  background-position: right center;
+  box-shadow:
+    0 6px 28px rgba(212, 160, 23, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.pv-btn-gold:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(212, 160, 23, 0.4);
+}
+
+/* Shimmer sweep on primary buttons */
+.pv-btn-gold::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 60px;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.pv-btn-gold:hover::after {
+  left: 160%;
+}
+
+/* Secondary — Felt green */
+.pv-btn-green {
+  background: linear-gradient(135deg, var(--pv-felt) 0%, var(--pv-felt-mid) 100%);
+  color: #f5e6c8;
+  border: 1px solid var(--pv-border-felt);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.pv-btn-green:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--pv-felt-mid) 0%, #2d7a50 100%);
+  border-color: rgba(212, 160, 23, 0.5);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+  transform: translateY(-1px);
+}
+
+.pv-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Inputs ─────────────────────────────────────────────────── */
+.pv-input {
+  background: rgba(3, 10, 6, 0.85);
+  border: 2px solid rgba(212, 160, 23, 0.3);
+  color: var(--pv-cream);
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.pv-input:focus {
+  outline: none;
+  border-color: rgba(212, 160, 23, 0.75);
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.15), 0 0 16px rgba(212, 160, 23, 0.1);
+  background: rgba(5, 18, 10, 0.9);
+}
+
+.pv-input::placeholder {
+  color: rgba(245, 230, 200, 0.28);
+}
+
+/* Large PIN input */
+.pv-input-pin {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.3em;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── Badges / Pills ──────────────────────────────────────────── */
+.pv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pv-gold-dark), var(--pv-gold-light));
+  color: #0a1f12;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 2px 12px rgba(212, 160, 23, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.pv-badge-felt {
+  background: linear-gradient(135deg, var(--pv-felt), var(--pv-felt-mid));
+  color: rgba(245, 230, 200, 0.9);
+  border: 1px solid var(--pv-border-felt);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Points / Score Display ─────────────────────────────────── */
+.pv-score {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, var(--pv-gold-bright), var(--pv-gold), var(--pv-gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(212, 160, 23, 0.5));
+}
+
+/* ── Neon Glow Helpers ───────────────────────────────────────── */
+.pv-glow-gold {
+  box-shadow:
+    0 0 12px rgba(212, 160, 23, 0.5),
+    0 0 35px rgba(212, 160, 23, 0.25),
+    0 0 60px rgba(212, 160, 23, 0.1);
+}
+
+.pv-glow-green {
+  box-shadow:
+    0 0 12px rgba(0, 232, 122, 0.3),
+    0 0 35px rgba(0, 232, 122, 0.15);
+}
+
+/* ── Decorative Divider ──────────────────────────────────────── */
+.pv-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 160, 23, 0.4) 50%, transparent 100%);
+  margin: 16px 0;
+}
+
+/* ── Leaderboard rows ────────────────────────────────────────── */
+.pv-row-gold    { background: rgba(212, 160, 23, 0.25); color: var(--pv-gold-light);  border: 1px solid rgba(212, 160, 23, 0.35); }
+.pv-row-silver  { background: rgba(192, 192, 192, 0.12); color: #e2e8f0; }
+.pv-row-bronze  { background: rgba(180, 120, 60, 0.18);  color: #f5c285; }
+.pv-row-default { color: rgba(245, 230, 200, 0.7); }
+
+/* ── Tier progress bar ───────────────────────────────────────── */
+.pv-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  height: 10px;
+}
+
+.pv-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pv-felt-mid), var(--pv-gold), var(--pv-gold-light));
+  background-size: 200% auto;
+  animation: pv-shimmer-bar 3s linear infinite;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Redemption Code ──────────────────────────────────────────── */
+.pv-code {
+  font-family: 'Poppins', monospace;
+  font-weight: 900;
+  font-size: 1.75rem;
+  letter-spacing: 0.35em;
+  color: var(--pv-gold-light);
+  filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.6));
+  text-shadow: 0 0 20px rgba(212, 160, 23, 0.4);
+}
+
+/* ── Tab Navigation ───────────────────────────────────────────── */
+.pv-tab {
+  padding: 9px 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  flex: 1;
+}
+
+.pv-tab-active {
+  background: linear-gradient(135deg, var(--pv-gold-dark), var(--pv-gold-light));
+  color: #0a1f12;
+  box-shadow: 0 3px 12px rgba(212, 160, 23, 0.45);
+}
+
+.pv-tab-inactive {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(245, 230, 200, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pv-tab-inactive:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(245, 230, 200, 0.85);
+}
+
+/* ── Reward Catalog Card ──────────────────────────────────────── */
+.pv-reward-card {
+  border-radius: 16px;
+  padding: 16px;
+  border: 1.5px solid;
+  transition: all 0.2s ease;
+}
+
+.pv-reward-card-available {
+  background: rgba(36, 92, 62, 0.12);
+  border-color: rgba(212, 160, 23, 0.4);
+}
+
+.pv-reward-card-available:hover {
+  border-color: rgba(212, 160, 23, 0.7);
+  background: rgba(36, 92, 62, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(212, 160, 23, 0.15);
+}
+
+.pv-reward-card-locked {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.08);
+  opacity: 0.6;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 160, 23, 0.4);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 160, 23, 0.65);
+}
+
+/* ── Selection ────────────────────────────────────────────────── */
+::selection {
+  background: rgba(212, 160, 23, 0.3);
+  color: var(--pv-cream);
+}
+
+/* ── Animations ───────────────────────────────────────────────── */
+
+@keyframes pv-shimmer-text {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pv-shimmer-bar {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pv-glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.4)); }
+  50%       { filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.8)); }
+}
+
+@keyframes pv-slide-up {
+  0%   { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes pv-pop-in {
+  0%   { transform: scale(0.82); opacity: 0; }
+  70%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes pv-neon-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.85; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.9; }
+}
+
+.pv-slide-up  { animation: pv-slide-up  0.5s ease-out forwards; }
+.pv-pop-in    { animation: pv-pop-in    0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.pv-glow-anim { animation: pv-glow-pulse 2.5s ease-in-out infinite; }
+.pv-flicker   { animation: pv-neon-flicker 6s ease-in-out infinite; }
+
+/* ── Game selection cards ─────────────────────────────────────── */
+.pv-mode-card {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.pv-mode-card:hover {
+  border-color: rgba(212, 160, 23, 0.45);
+  background: rgba(212, 160, 23, 0.06);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.pv-mode-card-selected {
+  border-color: rgba(212, 160, 23, 0.7) !important;
+  background: rgba(212, 160, 23, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.35), 0 4px 16px rgba(212, 160, 23, 0.2) !important;
+}
+
+/* ── Profile strip / reward strip ────────────────────────────── */
+.pv-profile-strip {
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.12) 0%, rgba(36, 92, 62, 0.18) 100%);
+  border: 1.5px solid rgba(212, 160, 23, 0.4);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pv-profile-strip:hover {
+  border-color: rgba(212, 160, 23, 0.7);
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.18) 0%, rgba(36, 92, 62, 0.25) 100%);
+  box-shadow: 0 4px 20px rgba(212, 160, 23, 0.15);
+}
+
+/* ── Responsive adjustments ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .pv-btn { padding: 12px 20px; font-size: 0.9rem; }
+  .pv-code { font-size: 1.4rem; letter-spacing: 0.25em; }
+}

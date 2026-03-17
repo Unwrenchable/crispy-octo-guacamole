@@ -6,7 +6,7 @@ import storageService from '../services/storage';
 function PlayerGame() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, teamId, teamName, gameMode = 'classic', genre = 'mixed' } = location.state || {};
+  const { pin, teamId, teamName, gameMode = 'classic', genre = 'mixed', playerPhone } = location.state || {};
   
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -17,6 +17,7 @@ function PlayerGame() {
   const [gameEnded, setGameEnded] = useState(false);
   const [myScore, setMyScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [rewardsAwarded, setRewardsAwarded] = useState([]);
 
   useEffect(() => {
     if (!pin || !teamId) {
@@ -65,8 +66,9 @@ function PlayerGame() {
       if (myTeam) {
         setMyScore(myTeam.score);
         
-        // Save game to history
         const myRank = data.finalLeaderboard.findIndex(team => team.name === teamName) + 1;
+
+        // Save game to history
         storageService.addGameToHistory({
           teamName,
           score: myTeam.score,
@@ -84,6 +86,20 @@ function PlayerGame() {
           gameMode || 'classic',
           genre || 'mixed'
         );
+
+        // Award Putters Points if player is logged in
+        if (playerPhone) {
+          const awarded = storageService.awardGamePoints(playerPhone, {
+            rank: myRank,
+            totalTeams: data.finalLeaderboard.length,
+            score: myTeam.score,
+            gameMode: gameMode || 'classic',
+            genre: genre || 'mixed',
+          });
+          if (awarded && awarded.length > 0) {
+            setRewardsAwarded(awarded);
+          }
+        }
       }
     });
 
@@ -114,33 +130,61 @@ function PlayerGame() {
 
   if (gameEnded) {
     const myRank = leaderboard.findIndex(team => team.name === teamName) + 1;
+    const totalPtsAwarded = rewardsAwarded.reduce((s, r) => s + (r?.points || 0), 0);
     
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-600 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black p-4">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="bg-black/60 backdrop-blur-md rounded-2xl shadow-2xl p-8 text-center border border-amber-500/20">
             <div className="text-6xl mb-4">
               {myRank === 1 ? '🏆' : myRank === 2 ? '🥈' : myRank === 3 ? '🥉' : '🎮'}
             </div>
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">Game Over!</h1>
-            <p className="text-2xl text-gray-600 mb-6">{teamName}</p>
+            <h1 className="text-4xl font-bold text-white mb-2">Game Over!</h1>
+            <p className="text-2xl text-amber-400 mb-6">{teamName}</p>
             
-            <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-xl p-6 mb-6">
+            <div className="bg-gradient-to-r from-amber-500/20 to-green-800/20 border border-amber-500/40 text-white rounded-xl p-6 mb-4">
               <div className="text-lg opacity-90 mb-2">Your Rank</div>
               <div className="text-6xl font-bold mb-2">#{myRank}</div>
               <div className="text-3xl font-semibold">{myScore} points</div>
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-4 mb-6">
-              <h3 className="font-bold text-gray-800 mb-3">Final Standings</h3>
+            {/* Putters Points earned */}
+            {rewardsAwarded.length > 0 && (
+              <div className="bg-amber-500/20 border-2 border-amber-500 rounded-xl p-4 mb-4">
+                <p className="text-amber-400 font-bold text-lg mb-2">🎁 +{totalPtsAwarded} Putters Points earned!</p>
+                <div className="space-y-1">
+                  {rewardsAwarded.map((r, i) => r && (
+                    <div key={i} className="flex justify-between text-sm text-white/80">
+                      <span>{r.label}</span>
+                      <span className="text-amber-400 font-bold">+{r.points}</span>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => navigate('/rewards')}
+                  className="mt-3 w-full bg-amber-500 text-black font-bold py-2 rounded-lg text-sm hover:bg-amber-400 transition"
+                >
+                  View My Rewards →
+                </button>
+              </div>
+            )}
+
+            {!playerPhone && (
+              <div className="bg-white/5 border border-white/10 rounded-xl p-3 mb-4">
+                <p className="text-white/70 text-sm">🎁 <button onClick={() => navigate('/login')} className="text-amber-400 underline font-semibold">Sign in with your phone</button> to earn Putters Points!</p>
+              </div>
+            )}
+
+            <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/10">
+              <h3 className="font-bold text-white mb-3">Final Standings</h3>
               <div className="space-y-2">
                 {leaderboard.map((team, index) => (
                   <div
                     key={index}
                     className={`flex justify-between items-center p-3 rounded-lg ${
                       team.name === teamName
-                        ? 'bg-blue-500 text-white font-bold'
-                        : 'bg-white'
+                        ? 'bg-amber-500 text-black font-bold'
+                        : 'bg-white/5 text-white'
                     }`}
                   >
                     <span>#{index + 1} {team.name}</span>
@@ -152,9 +196,9 @@ function PlayerGame() {
 
             <button
               onClick={handleBackToHome}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold py-3 px-6 rounded-xl text-lg uppercase"
             >
-              Back to Home
+              Back to Home 🎱
             </button>
           </div>
         </div>

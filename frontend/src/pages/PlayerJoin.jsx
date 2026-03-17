@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import socketService from '../services/socket';
+import storageService from '../services/storage';
 
 function PlayerJoin() {
   const navigate = useNavigate();
@@ -9,14 +10,18 @@ function PlayerJoin() {
   const [teamName, setTeamName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     socketService.connect();
+    const p = storageService.getActiveProfile();
+    setProfile(p);
+    if (p && !teamName) setTeamName(p.displayName);
   }, []);
 
   const handleJoin = async () => {
     if (!pin.trim() || !teamName.trim()) {
-      setError('Please enter both PIN and team name');
+      setError('Please enter both PIN and your name');
       return;
     }
 
@@ -27,13 +32,23 @@ function PlayerJoin() {
       setLoading(false);
       
       if (response.success) {
-        navigate('/play', {
-          state: {
-            pin: pin,
-            teamId: response.teamId,
-            teamName: response.teamName
-          }
-        });
+        const gameMode = response.gameMode || 'classic';
+        const state = {
+          pin: pin,
+          teamId: response.teamId,
+          teamName: response.teamName,
+          gameMode: gameMode,
+          genre: response.genre || 'mixed',
+          playerPhone: profile?.phone || null,
+        };
+
+        if (gameMode === 'pictionary') {
+          navigate('/play/pictionary', { state });
+        } else if (gameMode === 'apples-to-apples') {
+          navigate('/play/apples', { state });
+        } else {
+          navigate('/play', { state });
+        }
       } else {
         setError(response.error || 'Failed to join game');
       }
@@ -41,32 +56,56 @@ function PlayerJoin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-green-950 to-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow"></div>
-        <div className="absolute bottom-20 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse-slow" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-20 right-20 w-72 h-72 bg-green-800 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow"></div>
+        <div className="absolute bottom-20 left-20 w-72 h-72 bg-amber-900 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse-slow" style={{animationDelay: '1s'}}></div>
       </div>
 
       <div className="max-w-md w-full relative z-10 animate-scale-in">
-        <div className="glass rounded-3xl shadow-large p-8 border border-white/30">
+        <div className="bg-black/60 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-amber-500/20">
           {/* Header */}
-          <div className="text-center mb-8 animate-slide-down">
-            <div className="flex items-center justify-center mb-4">
-              <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-4 rounded-2xl shadow-glow-md">
-                <span className="text-5xl">🎮</span>
+          <div className="text-center mb-6 animate-slide-down">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className="text-5xl">🎱</span>
+              <span className="text-5xl">🎨</span>
+              <span className="text-5xl">🍎</span>
+            </div>
+            <h1 className="text-4xl font-bold mb-2 text-white">
+              Join Game
+            </h1>
+            <p className="text-amber-400 text-lg">Enter the PIN from your host screen</p>
+          </div>
+
+          {/* Profile badge if logged in */}
+          {profile ? (
+            <div
+              onClick={() => navigate('/rewards')}
+              className="flex items-center gap-3 bg-amber-500/10 border border-amber-500/40 rounded-xl p-3 mb-5 cursor-pointer hover:border-amber-500 transition"
+            >
+              <span className="text-2xl">⭐</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-white font-semibold text-sm truncate">{profile.displayName}</div>
+                <div className="text-amber-400 text-xs">{profile.points} Putters Points — tap to view rewards</div>
               </div>
             </div>
-            <h1 className="text-4xl font-display font-bold mb-2">
-              <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Join Game</span>
-            </h1>
-            <p className="text-gray-600 text-lg">Enter the game PIN from your host</p>
-          </div>
+          ) : (
+            <button
+              onClick={() => navigate('/login', { state: { returnTo: `/join${pin ? `?pin=${pin}` : ''}` } })}
+              className="w-full flex items-center gap-3 bg-amber-500/10 border border-amber-500/30 hover:border-amber-500 rounded-xl p-3 mb-5 transition text-left"
+            >
+              <span className="text-2xl">🎁</span>
+              <div>
+                <div className="text-white font-semibold text-sm">Join Putters Rewards</div>
+                <div className="text-amber-400/80 text-xs">Earn points for every game you play!</div>
+              </div>
+            </button>
+          )}
 
           <div className="space-y-5 animate-slide-up" style={{animationDelay: '0.1s'}}>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-sm font-semibold text-amber-400 mb-2">
                 Game PIN
               </label>
               <input
@@ -75,26 +114,26 @@ function PlayerJoin() {
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                 maxLength={4}
-                className="w-full px-4 py-4 text-3xl text-center rounded-xl border-2 border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none tracking-widest font-bold transition-all duration-200 bg-white shadow-inner-soft"
+                className="w-full px-4 py-4 text-3xl text-center rounded-xl border-2 border-amber-500 bg-white/10 text-white placeholder-white/30 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none tracking-widest font-bold transition-all duration-200"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Team Name
+              <label className="block text-sm font-semibold text-amber-400 mb-2">
+                Your Name / Team Name
               </label>
               <input
                 type="text"
-                placeholder="Enter your team name"
+                placeholder="Enter your name"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleJoin()}
-                className="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-3 rounded-xl border-2 border-amber-500/50 bg-white/10 text-white placeholder-white/30 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none transition-all duration-200"
               />
             </div>
 
             {error && (
-              <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-xl flex items-center gap-2 animate-slide-down">
+              <div className="bg-red-900/40 border-2 border-red-500 text-red-300 px-4 py-3 rounded-xl flex items-center gap-2 animate-slide-down">
                 <span className="text-xl">⚠️</span>
                 <span>{error}</span>
               </div>
@@ -103,7 +142,7 @@ function PlayerJoin() {
             <button
               onClick={handleJoin}
               disabled={loading || !pin.trim() || !teamName.trim()}
-              className="w-full font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 hover:shadow-lg hover:-translate-y-0.5 focus:ring-blue-500 shadow-lg text-lg"
+              className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-amber-500 to-amber-600 text-black hover:from-amber-400 hover:to-amber-500 hover:shadow-xl hover:-translate-y-0.5 shadow-lg text-xl uppercase tracking-wide"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -115,20 +154,20 @@ function PlayerJoin() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  Join Game <span className="text-2xl">🚀</span>
+                  Let's Play! <span className="text-2xl">🎱</span>
                 </span>
               )}
             </button>
 
             <button
               onClick={() => navigate('/')}
-              className="w-full border-2 border-gray-300 bg-white text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:border-primary-500 hover:text-primary-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="w-full border-2 border-white/20 bg-white/5 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:border-amber-500 hover:text-amber-400 focus:outline-none"
             >
               ← Back to Home
             </button>
           </div>
 
-          <div className="mt-6 text-center text-sm text-gray-500 animate-fade-in" style={{animationDelay: '0.3s'}}>
+          <div className="mt-6 text-center text-sm text-white/50 animate-fade-in" style={{animationDelay: '0.3s'}}>
             <p className="flex items-center justify-center gap-1">
               <span className="text-lg">💡</span>
               <span>Get the PIN from your game host</span>
