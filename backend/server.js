@@ -321,7 +321,85 @@ const QUESTION_BANKS = {
     { text: "What is the name of the in-game currency in Roblox?", options: ["Credits", "Robux", "Coins", "Bucks"], correctAnswer: "Robux", category: "Games" },
     { text: "Which game popularized the 'battle royale' genre?", options: ["Fortnite", "PUBG", "Apex Legends", "H1Z1"], correctAnswer: "PUBG", category: "Games" }
   ],
+  'las-vegas': [
+    { text: "What is the nickname for the Las Vegas Strip?", options: ["The Boulevard", "The Neon Mile", "The Golden Road", "The Strip"], correctAnswer: "The Strip", category: "🎰 Las Vegas" },
+    { text: "Which famous Las Vegas hotel has a replica of the Eiffel Tower?", options: ["Bellagio", "Paris Las Vegas", "Caesars Palace", "Wynn"], correctAnswer: "Paris Las Vegas", category: "🎰 Las Vegas" },
+    { text: "What year was Las Vegas officially incorporated as a city?", options: ["1900", "1905", "1910", "1915"], correctAnswer: "1905", category: "🎰 Las Vegas" },
+    { text: "The Bellagio fountains use water from which lake?", options: ["Lake Mead", "Lake Las Vegas", "An artificial reservoir", "Underground wells"], correctAnswer: "An artificial reservoir", category: "🎰 Las Vegas" },
+    { text: "What is the name of the famous welcome sign on Las Vegas Blvd?", options: ["Welcome to Fabulous Las Vegas Nevada", "Viva Las Vegas", "What Happens Here Stays Here", "City of Lights"], correctAnswer: "Welcome to Fabulous Las Vegas Nevada", category: "🎰 Las Vegas" },
+    { text: "Which Las Vegas casino resort is known for its volcano attraction?", options: ["MGM Grand", "Treasure Island", "The Mirage", "Luxor"], correctAnswer: "The Mirage", category: "🎰 Las Vegas" },
+    { text: "What shape is the Luxor hotel in Las Vegas?", options: ["Pyramid", "Cylinder", "Dome", "Tower"], correctAnswer: "Pyramid", category: "🎰 Las Vegas" },
+    { text: "Which famous comedian has performed a long-running residency at Caesar's Palace?", options: ["Jerry Seinfeld", "Dave Chappelle", "Kevin Hart", "Gabriel Iglesias"], correctAnswer: "Jerry Seinfeld", category: "🎰 Las Vegas" },
+    { text: "How many miles long is the Las Vegas Strip (roughly)?", options: ["2 miles", "4 miles", "6 miles", "8 miles"], correctAnswer: "4 miles", category: "🎰 Las Vegas" },
+    { text: "What is the name of the indoor roller coaster inside the New York-New York casino?", options: ["Big Apple Coaster", "NYC Express", "The Manhattan", "Empire Ride"], correctAnswer: "Big Apple Coaster", category: "🎰 Las Vegas" },
+    { text: "Fremont Street is famous for its massive LED canopy. How long is it?", options: ["1,500 feet", "3,000 feet", "4,500 feet", "1 mile"], correctAnswer: "1,500 feet", category: "🎰 Las Vegas" },
+    { text: "Which Las Vegas hotel was once the tallest building west of the Mississippi?", options: ["MGM Grand", "Stratosphere Tower", "Wynn", "Caesars Palace"], correctAnswer: "Stratosphere Tower", category: "🎰 Las Vegas" },
+    { text: "What is the average temperature in Las Vegas during July (°F)?", options: ["85°F", "95°F", "105°F", "115°F"], correctAnswer: "105°F", category: "🎰 Las Vegas" },
+    { text: "Which famous rock band is based in Las Vegas?", options: ["Imagine Dragons", "The Killers", "3 Doors Down", "Both A and B"], correctAnswer: "Both A and B", category: "🎰 Las Vegas" },
+    { text: "What landmark is located about 30 miles from Las Vegas?", options: ["Grand Canyon", "Hoover Dam", "Zion National Park", "Death Valley"], correctAnswer: "Hoover Dam", category: "🎰 Las Vegas" },
+    { text: "Las Vegas is located in which Nevada county?", options: ["Washoe County", "Clark County", "Nye County", "Douglas County"], correctAnswer: "Clark County", category: "🎰 Las Vegas" },
+    { text: "Which mini golf and entertainment venue is known as Putters on the Strip?", options: ["Adventure Golf", "Putters Vegas", "Mini Golf Palace", "The Putter Club"], correctAnswer: "Putters Vegas", category: "🎰 Las Vegas" },
+    { text: "What is the name of the famous Las Vegas magic duo who performed at the Mirage for years?", options: ["Penn & Teller", "Siegfried & Roy", "David & Goliath", "Copperfield & White"], correctAnswer: "Siegfried & Roy", category: "🎰 Las Vegas" },
+    { text: "Which area just west of Las Vegas is known for red rock formations?", options: ["Valley of Fire", "Red Rock Canyon", "Boulder City", "Henderson"], correctAnswer: "Red Rock Canyon", category: "🎰 Las Vegas" },
+    { text: "What is the population of Las Vegas metro area (approximately)?", options: ["500,000", "1 million", "2 million", "3 million"], correctAnswer: "2 million", category: "🎰 Las Vegas" },
+    { text: "Which legendary entertainer was known as 'Mr. Las Vegas'?", options: ["Frank Sinatra", "Dean Martin", "Wayne Newton", "Sammy Davis Jr."], correctAnswer: "Wayne Newton", category: "🎰 Las Vegas" },
+    { text: "How many visitors does Las Vegas attract annually (approximately)?", options: ["20 million", "30 million", "40 million", "50 million"], correctAnswer: "40 million", category: "🎰 Las Vegas" },
+    { text: "The High Roller observation wheel opened in Las Vegas in what year?", options: ["2010", "2012", "2014", "2016"], correctAnswer: "2014", category: "🎰 Las Vegas" },
+    { text: "Which neighborhood in Las Vegas is known for its arts district?", options: ["Downtown Container Park area", "The Arts District", "18b Arts District", "Fremont East"], correctAnswer: "18b Arts District", category: "🎰 Las Vegas" },
+    { text: "What is the name of the massive indoor entertainment sphere that opened in Las Vegas in 2023?", options: ["The Globe", "Sphere", "The Orb", "Vegas Dome"], correctAnswer: "Sphere", category: "🎰 Las Vegas" }
+  ],
 };
+
+// Pictionary word lists
+const PICTIONARY_WORDS = {
+  easy: [
+    'cat', 'dog', 'house', 'tree', 'sun', 'moon', 'car', 'boat', 'fish', 'bird',
+    'apple', 'pizza', 'cake', 'hat', 'shoe', 'star', 'heart', 'cloud', 'rain', 'snow',
+    'beach', 'mountain', 'flower', 'plane', 'train', 'bus', 'ball', 'book', 'chair', 'table'
+  ],
+  medium: [
+    'skateboard', 'volcano', 'rainbow', 'lighthouse', 'castle', 'dragon', 'pirate', 'mermaid',
+    'submarine', 'helicopter', 'tornado', 'cactus', 'penguin', 'elephant', 'robot', 'wizard',
+    'campfire', 'snowman', 'birthday', 'treasure', 'spider', 'monkey', 'giraffe', 'crocodile'
+  ],
+  hard: [
+    'Las Vegas', 'blackjack', 'jackpot', 'poker night', 'mini golf', 'neon sign', 'slot machine',
+    'poker chip', 'roulette', 'dice roll', 'high roller', 'free drinks', 'late night', 'all-in',
+    'house always wins', 'shuffle', 'dealer', 'casino floor', 'showgirl', 'comedian'
+  ],
+  'vegas-themed': [
+    'jackpot', 'slot machine', 'poker', 'roulette', 'dice', 'neon sign', 'showgirl', 'magician',
+    'Eiffel Tower replica', 'pyramid hotel', 'dancing fountain', 'roller coaster', 'mini golf',
+    'buffet', 'penthouse', 'limo', 'wedding chapel', 'desert', 'palm tree', 'cocktail'
+  ]
+};
+
+// Apples to Apples green cards (adjectives/topics) and red cards (nouns/things)
+const APPLES_CARDS = {
+  green: [
+    'Hilarious', 'Terrifying', 'Delicious', 'Awkward', 'Legendary', 'Wild', 'Sneaky', 'Fabulous',
+    'Exhausting', 'Overrated', 'Underrated', 'Romantic', 'Ridiculous', 'Mysterious', 'Unstoppable',
+    'Cringeworthy', 'Iconic', 'Chaotic', 'Unbelievable', 'Relatable', 'Epic', 'Sketchy', 'Wholesome',
+    'Spicy', 'Basic', 'Extra', 'Toxic', 'Blessed', 'Cursed', 'Savage'
+  ],
+  red: [
+    'Your ex', 'Monday mornings', 'Free Wi-Fi', 'Las Vegas at 3am', 'The buffet line',
+    'A slot machine jackpot', 'Your boss on vacation', 'A poker face', 'Bar trivia night',
+    'The hotel mini bar', 'Room service at midnight', 'A round of shots', 'The designated driver',
+    'Party in Vegas', 'The Strip at night', 'Winning at blackjack', 'Your high score',
+    'The walk of shame', 'An open bar', 'A magic show', 'The all-you-can-eat buffet',
+    'A casino floor', 'Losing your room key', 'Finding $20', 'A surprise upgrade',
+    'Late night tacos', 'The best man speech', 'A wedding chapel', 'Pool party', 'Karaoke',
+    'Your teammates', 'The last question', 'A perfect score', 'Going home early', 'One more round'
+  ]
+};
+
+// Scoring constants
+const PICTIONARY_MAX_GUESS_POINTS = 50;
+const PICTIONARY_MIN_GUESS_POINTS = 10;
+const PICTIONARY_POINT_DECAY_PER_GUESS = 10;
+const PICTIONARY_DRAWER_POINTS_PER_GUESSER = 25;
+const APPLES_ROUND_WIN_POINTS = 100;
 
 // Game state management
 class Game {
@@ -330,17 +408,33 @@ class Game {
     this.pin = generateGamePin();
     this.hostId = hostId;
     this.hostName = hostName;
-    this.gameMode = gameMode; // classic, buzzer, speed-round
-    this.genre = genre; // sports, movies, music, science, history, geography, pop-culture, food-drink, technology, games, mixed
+    this.gameMode = gameMode; // classic, buzzer, speed-round, lightning, pictionary, apples-to-apples
+    this.genre = genre; // sports, movies, music, science, history, geography, pop-culture, food-drink, technology, games, las-vegas, mixed
     this.teams = new Map();
     this.questions = [];
     this.currentQuestionIndex = -1;
-    this.state = 'lobby'; // lobby, question, answer-reveal, ended, buzzer-active
+    this.state = 'lobby'; // lobby, question, answer-reveal, ended, buzzer-active, drawing, guessing, judging
     this.timer = null;
     this.questionStartTime = null;
     this.buzzerQueue = []; // For buzzer mode
     this.buzzedTeam = null; // Team that buzzed first
     this.usedQuestionIds = new Set(); // Track used questions to prevent repeats
+    // Pictionary state
+    this.pictionaryWords = [];
+    this.currentWord = null;
+    this.currentDrawerIndex = 0;
+    this.currentDrawerId = null;
+    this.pictionaryRound = 0;
+    this.correctGuessers = new Set();
+    // Apples to Apples state
+    this.applesGreenCard = null;
+    this.applesRound = 0;
+    this.applesJudgeIndex = 0;
+    this.applesJudgeId = null;
+    this.applesSubmissions = new Map(); // teamId -> card text
+    this.applesHands = new Map(); // teamId -> [card, card, ...]
+    this.applesUsedGreen = new Set();
+    this.applesUsedRed = new Set();
   }
 
   addTeam(teamId, teamName, socketId) {
@@ -538,6 +632,146 @@ class Game {
       totalQuestions: this.questions.length
     };
   }
+
+  // Pictionary methods
+  initPictionary(difficulty = 'medium') {
+    const wordPool = [
+      ...(PICTIONARY_WORDS.easy || []),
+      ...(PICTIONARY_WORDS[difficulty] || PICTIONARY_WORDS.medium),
+      ...(PICTIONARY_WORDS['vegas-themed'] || [])
+    ];
+    this.pictionaryWords = shuffleArray(wordPool);
+    this.currentDrawerIndex = 0;
+    this.pictionaryRound = 0;
+    const teamIds = Array.from(this.teams.keys());
+    this.currentDrawerId = teamIds[0] || null;
+    return teamIds.length > 0;
+  }
+
+  nextPictionaryTurn() {
+    const teamIds = Array.from(this.teams.keys());
+    if (teamIds.length === 0) return null;
+    this.correctGuessers = new Set();
+    this.currentDrawerIndex = (this.currentDrawerIndex + 1) % teamIds.length;
+    if (this.currentDrawerIndex === 0) this.pictionaryRound++;
+    this.currentDrawerId = teamIds[this.currentDrawerIndex];
+    this.currentWord = this.pictionaryWords[Math.floor(Math.random() * this.pictionaryWords.length)];
+    this.state = 'drawing';
+    return {
+      drawerId: this.currentDrawerId,
+      drawerName: this.teams.get(this.currentDrawerId)?.name,
+      round: this.pictionaryRound
+    };
+  }
+
+  startPictionaryTurn() {
+    const teamIds = Array.from(this.teams.keys());
+    if (teamIds.length === 0) return null;
+    this.correctGuessers = new Set();
+    this.currentDrawerId = teamIds[this.currentDrawerIndex % teamIds.length];
+    this.currentWord = this.pictionaryWords[Math.floor(Math.random() * this.pictionaryWords.length)];
+    this.state = 'drawing';
+    return {
+      drawerId: this.currentDrawerId,
+      drawerName: this.teams.get(this.currentDrawerId)?.name,
+      round: this.pictionaryRound
+    };
+  }
+
+  submitPictionaryGuess(teamId, guess) {
+    if (this.state !== 'drawing') return { valid: false };
+    if (teamId === this.currentDrawerId) return { valid: false, message: "You're drawing!" };
+    if (this.correctGuessers.has(teamId)) return { valid: false, message: 'Already guessed correctly' };
+
+    const isCorrect = guess.trim().toLowerCase() === this.currentWord.toLowerCase();
+    if (isCorrect) {
+      this.correctGuessers.add(teamId);
+      const team = this.teams.get(teamId);
+      const drawer = this.teams.get(this.currentDrawerId);
+      // Points based on guess order
+      const points = Math.max(PICTIONARY_MIN_GUESS_POINTS, PICTIONARY_MAX_GUESS_POINTS - (this.correctGuessers.size - 1) * PICTIONARY_POINT_DECAY_PER_GUESS);
+      if (team) team.score += points;
+      // Drawer gets points per correct guesser
+      if (drawer) drawer.score += PICTIONARY_DRAWER_POINTS_PER_GUESSER;
+      return { valid: true, isCorrect: true, points, guesserName: team?.name };
+    }
+    return { valid: true, isCorrect: false };
+  }
+
+  // Apples to Apples methods
+  initApplesToApples() {
+    // Deal 5 red cards to each team
+    const shuffledRed = shuffleArray([...APPLES_CARDS.red]);
+    let cardIndex = 0;
+    this.teams.forEach((team, teamId) => {
+      const hand = [];
+      for (let i = 0; i < 5; i++) {
+        if (cardIndex < shuffledRed.length) {
+          hand.push(shuffledRed[cardIndex++]);
+          this.applesUsedRed.add(shuffledRed[cardIndex - 1]);
+        }
+      }
+      this.applesHands.set(teamId, hand);
+    });
+    this.applesRound = 0;
+    const teamIds = Array.from(this.teams.keys());
+    this.applesJudgeId = teamIds[0];
+    this.state = 'judging';
+    return true;
+  }
+
+  startApplesRound() {
+    // Pick new green card
+    const availableGreen = APPLES_CARDS.green.filter(c => !this.applesUsedGreen.has(c));
+    const greenPool = availableGreen.length > 0 ? availableGreen : APPLES_CARDS.green;
+    this.applesGreenCard = greenPool[Math.floor(Math.random() * greenPool.length)];
+    this.applesUsedGreen.add(this.applesGreenCard);
+    this.applesSubmissions = new Map();
+    // Pick judge (rotate)
+    const teamIds = Array.from(this.teams.keys());
+    this.applesJudgeIndex = this.applesRound % teamIds.length;
+    this.applesJudgeId = teamIds[this.applesJudgeIndex];
+    this.applesRound++;
+    this.state = 'playing-cards';
+    return {
+      greenCard: this.applesGreenCard,
+      judgeId: this.applesJudgeId,
+      judgeName: this.teams.get(this.applesJudgeId)?.name,
+      round: this.applesRound
+    };
+  }
+
+  submitApplesCard(teamId, card) {
+    if (teamId === this.applesJudgeId) return { valid: false, message: "You're the judge!" };
+    if (this.applesSubmissions.has(teamId)) return { valid: false, message: 'Already submitted' };
+    const hand = this.applesHands.get(teamId) || [];
+    if (!hand.includes(card)) return { valid: false, message: 'Card not in hand' };
+    this.applesSubmissions.set(teamId, card);
+    // Remove played card from hand and deal a new one
+    const newHand = hand.filter(c => c !== card);
+    // Use the persistent applesUsedRed set (maintained across the game) to avoid duplicates
+    const availableRed = APPLES_CARDS.red.filter(c => !this.applesUsedRed.has(c));
+    const pool = availableRed.length > 0 ? availableRed : APPLES_CARDS.red;
+    const newCard = pool[Math.floor(Math.random() * pool.length)];
+    newHand.push(newCard);
+    this.applesUsedRed.add(newCard);
+    this.applesHands.set(teamId, newHand);
+    return { valid: true, submitted: true, submittedCount: this.applesSubmissions.size };
+  }
+
+  judgeApples(winningTeamId) {
+    const team = this.teams.get(winningTeamId);
+    if (team) team.score += APPLES_ROUND_WIN_POINTS;
+    const winningCard = this.applesSubmissions.get(winningTeamId);
+    this.state = 'judging';
+    return {
+      winningTeamId,
+      winningTeamName: team?.name,
+      winningCard,
+      greenCard: this.applesGreenCard,
+      leaderboard: this.getLeaderboard()
+    };
+  }
 }
 
 // REST API endpoints
@@ -685,7 +919,9 @@ io.on('connection', (socket) => {
       success: true,
       teamId: teamId,
       teamName: teamName,
-      gameState: game.state
+      gameState: game.state,
+      gameMode: game.gameMode,
+      genre: game.genre
     });
   });
 
@@ -877,6 +1113,229 @@ io.on('connection', (socket) => {
     io.to(`game-${pin}`).emit('buzzer:cleared');
     
     callback({ success: true });
+  });
+
+  // ==================== PICTIONARY EVENTS ====================
+
+  // Host starts Pictionary game
+  socket.on('host:start-pictionary', (data, callback) => {
+    const { pin, difficulty = 'medium' } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const ok = game.initPictionary(difficulty);
+    if (!ok) return callback({ success: false, error: 'Need at least one player' });
+
+    const turnInfo = game.startPictionaryTurn();
+    if (!turnInfo) return callback({ success: false, error: 'Could not start turn' });
+
+    // Send word only to drawer
+    const drawerSocket = game.teams.get(turnInfo.drawerId)?.socketId;
+    if (drawerSocket) {
+      io.to(drawerSocket).emit('pictionary:your-turn', { word: game.currentWord });
+    }
+
+    // Notify everyone else
+    io.to(`game-${pin}`).emit('pictionary:round-start', {
+      drawerId: turnInfo.drawerId,
+      drawerName: turnInfo.drawerName,
+      round: turnInfo.round
+    });
+
+    console.log(`Pictionary started for game ${pin}, drawer: ${turnInfo.drawerName}`);
+    callback({ success: true, ...turnInfo });
+  });
+
+  // Host moves to next Pictionary turn
+  socket.on('host:next-pictionary-turn', (data, callback) => {
+    const { pin } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const turnInfo = game.nextPictionaryTurn();
+    if (!turnInfo) return callback({ success: false, error: 'No teams' });
+
+    const drawerSocket = game.teams.get(turnInfo.drawerId)?.socketId;
+    if (drawerSocket) {
+      io.to(drawerSocket).emit('pictionary:your-turn', { word: game.currentWord });
+    }
+
+    io.to(`game-${pin}`).emit('pictionary:round-start', {
+      drawerId: turnInfo.drawerId,
+      drawerName: turnInfo.drawerName,
+      round: turnInfo.round
+    });
+
+    callback({ success: true, ...turnInfo });
+  });
+
+  // Host ends Pictionary
+  socket.on('host:end-pictionary', (data, callback) => {
+    const { pin } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const result = game.endGame();
+    io.to(`game-${pin}`).emit('game:ended', result);
+    callback({ success: true, ...result });
+  });
+
+  // Relay drawing strokes from drawer to all players
+  socket.on('pictionary:draw', (data) => {
+    const { pin, stroke } = data;
+    // Broadcast to all in game room except sender
+    socket.to(`game-${pin}`).emit('pictionary:draw', { stroke });
+  });
+
+  // Clear canvas event
+  socket.on('pictionary:clear', (data) => {
+    const { pin } = data;
+    socket.to(`game-${pin}`).emit('pictionary:clear');
+  });
+
+  // Player submits a guess
+  socket.on('pictionary:guess', (data, callback) => {
+    const { pin, teamId, guess } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const result = game.submitPictionaryGuess(teamId, guess);
+    if (!result.valid) return callback({ success: false, message: result.message });
+
+    if (result.isCorrect) {
+      // Notify everyone of correct guess
+      io.to(`game-${pin}`).emit('pictionary:correct-guess', {
+        teamId,
+        guesserName: result.guesserName,
+        points: result.points,
+        word: game.currentWord,
+        leaderboard: game.getLeaderboard()
+      });
+    }
+
+    callback({ success: true, isCorrect: result.isCorrect });
+  });
+
+  // ==================== APPLES TO APPLES EVENTS ====================
+
+  // Host starts Apples to Apples
+  socket.on('host:start-apples', (data, callback) => {
+    const { pin } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    game.initApplesToApples();
+    const roundInfo = game.startApplesRound();
+
+    // Send each team their hand
+    game.applesHands.forEach((hand, teamId) => {
+      const team = game.teams.get(teamId);
+      if (team) {
+        io.to(team.socketId).emit('apples:deal-hand', { hand });
+      }
+    });
+
+    // Broadcast round info to everyone
+    io.to(`game-${pin}`).emit('apples:round-start', {
+      greenCard: roundInfo.greenCard,
+      judgeId: roundInfo.judgeId,
+      judgeName: roundInfo.judgeName,
+      round: roundInfo.round
+    });
+
+    console.log(`Apples to Apples started for game ${pin}`);
+    callback({ success: true, ...roundInfo });
+  });
+
+  // Host starts next Apples round
+  socket.on('host:next-apples-round', (data, callback) => {
+    const { pin } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const roundInfo = game.startApplesRound();
+
+    // Send updated hands
+    game.applesHands.forEach((hand, teamId) => {
+      const team = game.teams.get(teamId);
+      if (team) {
+        io.to(team.socketId).emit('apples:deal-hand', { hand });
+      }
+    });
+
+    io.to(`game-${pin}`).emit('apples:round-start', {
+      greenCard: roundInfo.greenCard,
+      judgeId: roundInfo.judgeId,
+      judgeName: roundInfo.judgeName,
+      round: roundInfo.round
+    });
+
+    callback({ success: true, ...roundInfo });
+  });
+
+  // Player plays a card
+  socket.on('apples:play-card', (data, callback) => {
+    const { pin, teamId, card } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const result = game.submitApplesCard(teamId, card);
+    if (!result.valid) return callback({ success: false, message: result.message });
+
+    const totalPlayers = game.teams.size - 1; // minus judge
+    const submittedCount = game.applesSubmissions.size;
+
+    // Notify host of submission count
+    io.to(`host-${pin}`).emit('apples:card-submitted', {
+      submittedCount,
+      totalNeeded: totalPlayers,
+      allIn: submittedCount >= totalPlayers
+    });
+
+    // If all cards are in, send shuffled submissions to judge
+    if (submittedCount >= totalPlayers) {
+      const submissions = Array.from(game.applesSubmissions.entries()).map(([tid, c]) => ({
+        teamId: tid,
+        card: c
+      }));
+      const shuffledSubmissions = shuffleArray(submissions);
+      // Send to judge
+      const judge = game.teams.get(game.applesJudgeId);
+      if (judge) {
+        io.to(judge.socketId).emit('apples:judge-cards', {
+          greenCard: game.applesGreenCard,
+          submissions: shuffledSubmissions
+        });
+      }
+      io.to(`game-${pin}`).emit('apples:all-cards-in', {
+        greenCard: game.applesGreenCard,
+        submittedCount
+      });
+    }
+
+    callback({ success: true, submitted: true });
+  });
+
+  // Judge picks winning card
+  socket.on('apples:judge-pick', (data, callback) => {
+    const { pin, winningTeamId } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const result = game.judgeApples(winningTeamId);
+    io.to(`game-${pin}`).emit('apples:round-winner', result);
+    callback({ success: true, ...result });
+  });
+
+  // Host ends Apples to Apples
+  socket.on('host:end-apples', (data, callback) => {
+    const { pin } = data;
+    const game = games.get(pin);
+    if (!game) return callback({ success: false, error: 'Game not found' });
+
+    const result = game.endGame();
+    io.to(`game-${pin}`).emit('game:ended', result);
+    callback({ success: true, ...result });
   });
 
   // Handle disconnection

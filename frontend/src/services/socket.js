@@ -97,6 +97,96 @@ class SocketService {
     this.socket.emit('game:get-leaderboard', { pin }, callback);
   }
 
+  // ==================== PICTIONARY ====================
+  startPictionary(pin, difficulty, callback) {
+    this.socket.emit('host:start-pictionary', { pin, difficulty }, callback);
+  }
+
+  nextPictionaryTurn(pin, callback) {
+    this.socket.emit('host:next-pictionary-turn', { pin }, callback);
+  }
+
+  endPictionary(pin, callback) {
+    this.socket.emit('host:end-pictionary', { pin }, callback);
+  }
+
+  sendDrawStroke(pin, stroke) {
+    this.socket.emit('pictionary:draw', { pin, stroke });
+  }
+
+  clearCanvas(pin) {
+    this.socket.emit('pictionary:clear', { pin });
+  }
+
+  submitGuess(pin, teamId, guess, callback) {
+    this.socket.emit('pictionary:guess', { pin, teamId, guess }, callback);
+  }
+
+  onPictionaryYourTurn(callback) {
+    this.socket.on('pictionary:your-turn', callback);
+  }
+
+  onPictionaryRoundStart(callback) {
+    this.socket.on('pictionary:round-start', callback);
+  }
+
+  onPictionaryDraw(callback) {
+    this.socket.on('pictionary:draw', callback);
+  }
+
+  onPictionaryClear(callback) {
+    this.socket.on('pictionary:clear', callback);
+  }
+
+  onPictionaryCorrectGuess(callback) {
+    this.socket.on('pictionary:correct-guess', callback);
+  }
+
+  // ==================== APPLES TO APPLES ====================
+  startApples(pin, callback) {
+    this.socket.emit('host:start-apples', { pin }, callback);
+  }
+
+  nextApplesRound(pin, callback) {
+    this.socket.emit('host:next-apples-round', { pin }, callback);
+  }
+
+  endApples(pin, callback) {
+    this.socket.emit('host:end-apples', { pin }, callback);
+  }
+
+  playApplesCard(pin, teamId, card, callback) {
+    this.socket.emit('apples:play-card', { pin, teamId, card }, callback);
+  }
+
+  judgeApplesPick(pin, winningTeamId, callback) {
+    this.socket.emit('apples:judge-pick', { pin, winningTeamId }, callback);
+  }
+
+  onApplesDealHand(callback) {
+    this.socket.on('apples:deal-hand', callback);
+  }
+
+  onApplesRoundStart(callback) {
+    this.socket.on('apples:round-start', callback);
+  }
+
+  onApplesAllCardsIn(callback) {
+    this.socket.on('apples:all-cards-in', callback);
+  }
+
+  onApplesJudgeCards(callback) {
+    this.socket.on('apples:judge-cards', callback);
+  }
+
+  onApplesCardSubmitted(callback) {
+    this.socket.on('apples:card-submitted', callback);
+  }
+
+  onApplesRoundWinner(callback) {
+    this.socket.on('apples:round-winner', callback);
+  }
+
   // Event listeners
   onTeamJoined(callback) {
     this.socket.on('team:joined', callback);
@@ -146,3 +236,4 @@ class SocketService {
 }
 
 export default new SocketService();
+
