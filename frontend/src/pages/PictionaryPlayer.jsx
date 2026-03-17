@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import socketService from '../services/socket';
+import storageService from '../services/storage';
 
 const COLORS = ['#ffffff', '#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ec4899', '#000000'];
 const SIZES = [2, 4, 8, 16];
@@ -8,7 +9,7 @@ const SIZES = [2, 4, 8, 16];
 function PictionaryPlayer() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, teamId, teamName } = location.state || {};
+  const { pin, teamId, teamName, playerPhone } = location.state || {};
 
   const canvasRef = useRef(null);
   const isDrawingRef = useRef(false);
@@ -28,6 +29,7 @@ function PictionaryPlayer() {
   const [round, setRound] = useState(0);
   const [color, setColor] = useState('#ef4444');
   const [brushSize, setBrushSize] = useState(4);
+  const [rewardsAwarded, setRewardsAwarded] = useState([]);
 
   useEffect(() => {
     if (!pin || !teamId) {
@@ -100,6 +102,19 @@ function PictionaryPlayer() {
     socketService.onGameEnded((data) => {
       setGameEnded(true);
       setLeaderboard(data.finalLeaderboard);
+
+      // Award Putters Points if player is logged in
+      if (playerPhone) {
+        const myRank = (data.finalLeaderboard || []).findIndex(t => t.name === teamName) + 1;
+        const awarded = storageService.awardGamePoints(playerPhone, {
+          rank: myRank,
+          totalTeams: (data.finalLeaderboard || []).length,
+          score: (data.finalLeaderboard || []).find(t => t.name === teamName)?.score || 0,
+          gameMode: 'pictionary',
+          genre: 'mixed',
+        });
+        if (awarded && awarded.length > 0) setRewardsAwarded(awarded);
+      }
     });
 
     return () => {
@@ -180,17 +195,31 @@ function PictionaryPlayer() {
 
   if (gameEnded) {
     const myRank = leaderboard.findIndex(t => t.name === teamName) + 1;
+    const totalPtsAwarded = rewardsAwarded.reduce((s, r) => s + (r?.points || 0), 0);
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-700 to-purple-900 p-4 flex items-center justify-center">
         <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 text-center max-w-md w-full border border-pink-500">
           <div className="text-5xl mb-4">{myRank === 1 ? '🏆' : myRank <= 3 ? '🎨' : '🎮'}</div>
           <h1 className="text-4xl font-bold text-white mb-2">Pictionary Over!</h1>
           <p className="text-pink-300 text-xl mb-6">{teamName}</p>
-          <div className="bg-pink-900/40 rounded-xl p-6 mb-6">
+          <div className="bg-pink-900/40 rounded-xl p-6 mb-4">
             <div className="text-white/70 mb-1">Your Rank</div>
             <div className="text-5xl font-bold text-white">#{myRank}</div>
             <div className="text-2xl text-yellow-400 font-bold mt-1">{myScore} points</div>
           </div>
+
+          {rewardsAwarded.length > 0 && (
+            <div className="bg-yellow-400/20 border-2 border-yellow-400 rounded-xl p-4 mb-4">
+              <p className="text-yellow-300 font-bold mb-1">🎁 +{totalPtsAwarded} Putters Points!</p>
+              {rewardsAwarded.map((r, i) => r && (
+                <div key={i} className="flex justify-between text-sm text-white/80">
+                  <span>{r.label}</span><span className="text-yellow-400 font-bold">+{r.points}</span>
+                </div>
+              ))}
+              <button onClick={() => navigate('/rewards')} className="mt-2 w-full bg-yellow-400 text-purple-900 font-bold py-1.5 rounded-lg text-sm">View Rewards →</button>
+            </div>
+          )}
+
           <div className="space-y-2 mb-6">
             {leaderboard.map((t, i) => (
               <div key={i} className={`flex justify-between p-2 rounded-lg ${t.name === teamName ? 'bg-pink-600 text-white font-bold' : 'bg-gray-800 text-gray-300'}`}>

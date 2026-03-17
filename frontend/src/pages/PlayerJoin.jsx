@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import socketService from '../services/socket';
+import storageService from '../services/storage';
 
 function PlayerJoin() {
   const navigate = useNavigate();
@@ -9,14 +10,18 @@ function PlayerJoin() {
   const [teamName, setTeamName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     socketService.connect();
+    const p = storageService.getActiveProfile();
+    setProfile(p);
+    if (p && !teamName) setTeamName(p.displayName);
   }, []);
 
   const handleJoin = async () => {
     if (!pin.trim() || !teamName.trim()) {
-      setError('Please enter both PIN and team name');
+      setError('Please enter both PIN and your name');
       return;
     }
 
@@ -33,7 +38,8 @@ function PlayerJoin() {
           teamId: response.teamId,
           teamName: response.teamName,
           gameMode: gameMode,
-          genre: response.genre || 'mixed'
+          genre: response.genre || 'mixed',
+          playerPhone: profile?.phone || null,
         };
 
         if (gameMode === 'pictionary') {
@@ -60,7 +66,7 @@ function PlayerJoin() {
       <div className="max-w-md w-full relative z-10 animate-scale-in">
         <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30">
           {/* Header */}
-          <div className="text-center mb-8 animate-slide-down">
+          <div className="text-center mb-6 animate-slide-down">
             <div className="flex items-center justify-center gap-3 mb-3">
               <span className="text-5xl">🎰</span>
               <span className="text-5xl">🎨</span>
@@ -71,6 +77,31 @@ function PlayerJoin() {
             </h1>
             <p className="text-yellow-300 text-lg">Enter the PIN from your host screen</p>
           </div>
+
+          {/* Profile badge if logged in */}
+          {profile ? (
+            <div
+              onClick={() => navigate('/rewards')}
+              className="flex items-center gap-3 bg-yellow-400/10 border border-yellow-400/40 rounded-xl p-3 mb-5 cursor-pointer hover:border-yellow-400 transition"
+            >
+              <span className="text-2xl">⭐</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-white font-semibold text-sm truncate">{profile.displayName}</div>
+                <div className="text-yellow-300 text-xs">{profile.points} Putters Points — tap to view rewards</div>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate('/login', { state: { returnTo: `/join${pin ? `?pin=${pin}` : ''}` } })}
+              className="w-full flex items-center gap-3 bg-yellow-400/10 border border-yellow-400/30 hover:border-yellow-400 rounded-xl p-3 mb-5 transition text-left"
+            >
+              <span className="text-2xl">🎁</span>
+              <div>
+                <div className="text-white font-semibold text-sm">Join Putters Rewards</div>
+                <div className="text-yellow-300/80 text-xs">Earn points for every game you play!</div>
+              </div>
+            </button>
+          )}
 
           <div className="space-y-5 animate-slide-up" style={{animationDelay: '0.1s'}}>
             <div>
@@ -149,4 +180,3 @@ function PlayerJoin() {
 }
 
 export default PlayerJoin;
-

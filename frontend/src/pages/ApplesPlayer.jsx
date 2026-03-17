@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import socketService from '../services/socket';
+import storageService from '../services/storage';
 
 function ApplesPlayer() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, teamId, teamName } = location.state || {};
+  const { pin, teamId, teamName, playerPhone } = location.state || {};
 
   const [hand, setHand] = useState([]);
   const [greenCard, setGreenCard] = useState('');
@@ -21,6 +22,7 @@ function ApplesPlayer() {
   const [myScore, setMyScore] = useState(0);
   const [gameEnded, setGameEnded] = useState(false);
   const [phase, setPhase] = useState('waiting'); // waiting, playing, judging, winner
+  const [rewardsAwarded, setRewardsAwarded] = useState([]);
 
   useEffect(() => {
     if (!pin || !teamId) { navigate('/join'); return; }
@@ -64,6 +66,18 @@ function ApplesPlayer() {
     socketService.onGameEnded((data) => {
       setGameEnded(true);
       setLeaderboard(data.finalLeaderboard);
+
+      if (playerPhone) {
+        const myRank = (data.finalLeaderboard || []).findIndex(t => t.name === teamName) + 1;
+        const awarded = storageService.awardGamePoints(playerPhone, {
+          rank: myRank,
+          totalTeams: (data.finalLeaderboard || []).length,
+          score: (data.finalLeaderboard || []).find(t => t.name === teamName)?.score || 0,
+          gameMode: 'apples-to-apples',
+          genre: 'mixed',
+        });
+        if (awarded && awarded.length > 0) setRewardsAwarded(awarded);
+      }
     });
 
     return () => {
@@ -97,17 +111,31 @@ function ApplesPlayer() {
 
   if (gameEnded) {
     const myRank = leaderboard.findIndex(t => t.name === teamName) + 1;
+    const totalPtsAwarded = rewardsAwarded.reduce((s, r) => s + (r?.points || 0), 0);
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-800 to-teal-900 p-4 flex items-center justify-center">
         <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 text-center max-w-md w-full border border-green-500">
           <div className="text-5xl mb-4">{myRank === 1 ? '🏆' : '🍎'}</div>
           <h1 className="text-4xl font-bold text-white mb-2">Game Over!</h1>
-          <p className="text-green-300 text-xl mb-6">{teamName}</p>
-          <div className="bg-green-900/40 rounded-xl p-6 mb-6">
+          <p className="text-green-300 text-xl mb-4">{teamName}</p>
+          <div className="bg-green-900/40 rounded-xl p-6 mb-4">
             <div className="text-white/70 mb-1">Your Rank</div>
             <div className="text-5xl font-bold text-white">#{myRank}</div>
             <div className="text-2xl text-yellow-400 font-bold mt-1">{myScore} points</div>
           </div>
+
+          {rewardsAwarded.length > 0 && (
+            <div className="bg-yellow-400/20 border-2 border-yellow-400 rounded-xl p-4 mb-4">
+              <p className="text-yellow-300 font-bold mb-1">🎁 +{totalPtsAwarded} Putters Points!</p>
+              {rewardsAwarded.map((r, i) => r && (
+                <div key={i} className="flex justify-between text-sm text-white/80">
+                  <span>{r.label}</span><span className="text-yellow-400 font-bold">+{r.points}</span>
+                </div>
+              ))}
+              <button onClick={() => navigate('/rewards')} className="mt-2 w-full bg-yellow-400 text-purple-900 font-bold py-1.5 rounded-lg text-sm">View Rewards →</button>
+            </div>
+          )}
+
           <div className="space-y-2 mb-6">
             {leaderboard.map((t, i) => (
               <div key={i} className={`flex justify-between p-2 rounded-lg ${t.name === teamName ? 'bg-green-700 text-white font-bold' : 'bg-gray-800 text-gray-300'}`}>

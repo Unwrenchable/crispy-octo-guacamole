@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import storageService from '../services/storage';
+import { useState, useEffect } from 'react';
+import storageService, { getTier } from '../services/storage';
 
 function Home() {
   const navigate = useNavigate();
@@ -8,6 +8,13 @@ function Home() {
   const [gameMode, setGameMode] = useState('classic');
   const [genre, setGenre] = useState('mixed');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const p = storageService.getActiveProfile();
+    setProfile(p);
+    if (p) setHostName(p.displayName);
+  }, []);
 
   const gameModes = [
     { id: 'classic', name: 'Classic Trivia', icon: '🎯', description: 'Traditional quiz with timed questions' },
@@ -47,6 +54,8 @@ function Home() {
 
   const isPictionaryOrApples = gameMode === 'pictionary' || gameMode === 'apples-to-apples';
 
+  const tier = profile ? getTier(profile.points) : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-orange-700 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Neon Vegas animated background */}
@@ -81,6 +90,40 @@ function Home() {
               <span className="inline-block bg-yellow-400 text-purple-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">🎰 Powered by Putters Vegas Vibes</span>
             </div>
           </div>
+
+          {/* Rewards profile strip - shown if logged in */}
+          {profile ? (
+            <button
+              onClick={() => navigate('/rewards')}
+              className="w-full bg-gradient-to-r from-yellow-400/20 to-orange-400/20 border-2 border-yellow-400/60 hover:border-yellow-400 rounded-2xl p-4 mb-6 flex items-center justify-between transition-all duration-200 group"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{tier.icon}</span>
+                <div className="text-left">
+                  <div className="text-white font-bold">{profile.displayName}</div>
+                  <div className="text-yellow-300 text-sm">{tier.name} Member</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-yellow-400 font-black text-2xl">{profile.points}</div>
+                <div className="text-white/60 text-xs">Putters Points →</div>
+              </div>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="w-full bg-gradient-to-r from-yellow-400/10 to-orange-400/10 border-2 border-yellow-400/40 hover:border-yellow-400 rounded-2xl p-4 mb-6 flex items-center justify-between transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">🎁</span>
+                <div className="text-left">
+                  <div className="text-white font-bold">Join Putters Rewards</div>
+                  <div className="text-yellow-300/80 text-sm">Earn points every game · Redeem for perks!</div>
+                </div>
+              </div>
+              <div className="text-yellow-400 font-bold text-sm whitespace-nowrap ml-2">Sign In →</div>
+            </button>
+          )}
 
           <div className="space-y-6">
             <div className="animate-slide-up" style={{animationDelay: '0.1s'}}>
@@ -225,3 +268,4 @@ function Home() {
 }
 
 export default Home;
+
