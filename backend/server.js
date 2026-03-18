@@ -603,13 +603,18 @@ const APPLES_ROUND_WIN_POINTS = 100;
 
 // Game state management
 class Game {
-  constructor(hostId, hostName, gameMode = 'classic', genre = 'mixed') {
+  constructor(hostId, hostName, gameMode = 'classic', genre = 'mixed', scoringConfig = {}) {
     this.id = uuidv4();
     this.pin = generateGamePin();
     this.hostId = hostId;
     this.hostName = hostName;
     this.gameMode = gameMode; // classic, buzzer, speed-round, lightning, pictionary, apples-to-apples
     this.genre = genre; // sports, movies, music, science, history, geography, pop-culture, food-drink, technology, games, las-vegas, mixed
+    this.scoringConfig = {
+      basePoints: scoringConfig.basePoints || 100,
+      timeBonusEnabled: scoringConfig.timeBonusEnabled !== false,
+      timeBonusMax: scoringConfig.timeBonusMax !== undefined ? scoringConfig.timeBonusMax : 50
+    };
     this.teams = new Map();
     this.questions = [];
     this.currentQuestionIndex = -1;
@@ -653,14 +658,16 @@ class Game {
 
   addQuestion(question) {
     const questionId = uuidv4();
-    this.questions.push({
+    const q = {
       id: questionId,
       text: question.text,
       options: question.options,
       correctAnswer: question.correctAnswer,
       timeLimit: question.timeLimit || 30,
       category: question.category || 'General'
-    });
+    };
+    if (question.imageUrl) q.imageUrl = question.imageUrl;
+    this.questions.push(q);
     this.usedQuestionIds.add(questionId); // Track this question as used
   }
 
@@ -780,7 +787,7 @@ class Game {
     if (this.currentQuestionIndex >= 0 && this.currentQuestionIndex < this.questions.length) {
       const question = this.questions[this.currentQuestionIndex];
       // Return question without correct answer to players
-      return {
+      const q = {
         id: question.id,
         text: question.text,
         options: question.options,
@@ -790,6 +797,8 @@ class Game {
         totalQuestions: this.questions.length,
         gameMode: this.gameMode
       };
+      if (question.imageUrl) q.imageUrl = question.imageUrl;
+      return q;
     }
     return null;
   }
@@ -804,13 +813,15 @@ class Game {
     const answerTime = Date.now() - this.questionStartTime;
     const isCorrect = answer === question.correctAnswer;
     
-    // Score calculation: correct answer + time bonus
+    // Score calculation: correct answer + time bonus (uses scoringConfig)
     let points = 0;
     if (isCorrect) {
-      points = 100;
-      // Time bonus: up to 50 extra points for quick answers
-      const timeBonus = Math.max(0, Math.floor(50 * (1 - answerTime / (question.timeLimit * 1000))));
-      points += timeBonus;
+      points = this.scoringConfig.basePoints;
+      // Time bonus: configurable max extra points for quick answers
+      if (this.scoringConfig.timeBonusEnabled) {
+        const timeBonus = Math.max(0, Math.floor(this.scoringConfig.timeBonusMax * (1 - answerTime / (question.timeLimit * 1000))));
+        points += timeBonus;
+      }
     }
 
     team.answers.push({
@@ -1042,9 +1053,9 @@ io.on('connection', (socket) => {
 
   // Host creates game
   socket.on('host:create-game', (data, callback) => {
-    const { hostName, gameMode = 'classic', genre = 'mixed' } = data;
+    const { hostName, gameMode = 'classic', genre = 'mixed', scoringConfig } = data;
     const hostId = uuidv4();
-    const game = new Game(hostId, hostName, gameMode, genre);
+    const game = new Game(hostId, hostName, gameMode, genre, scoringConfig || {});
     games.set(game.pin, game);
     
     socket.join(`game-${game.pin}`);
@@ -1571,6 +1582,23 @@ io.on('connection', (socket) => {
     const result = game.endGame();
     io.to(`game-${pin}`).emit('game:ended', result);
     callback({ success: true, ...result });
+  });
+
+  // ==================== EMOJI REACTIONS ====================
+  // Player sends an emoji reaction - broadcast to all in game room
+  socket.on('team:reaction', (data) => {
+    const { pin, teamId, emoji } = data;
+    const game = games.get(pin);
+    if (!game) return;
+
+    const team = game.teams.get(teamId);
+    const teamName = team ? team.name : 'Someone';
+
+    io.to(`game-${pin}`).emit('game:reaction', {
+      teamName,
+      emoji,
+      timestamp: Date.now()
+    });
   });
 
   // Handle disconnection

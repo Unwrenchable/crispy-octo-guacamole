@@ -256,15 +256,15 @@ The app uses Tailwind CSS. Modify colors and styles in:
 ## 📝 Future Enhancements
 
 - [ ] Open Trivia DB API integration
-- [ ] Image/media questions support
+- [x] Image/media questions support
 - [ ] Multiple game modes (buzzer-style, fastest finger, etc.)
 - [ ] Persistent leaderboards across games
-- [ ] Sound effects and animations
-- [ ] Admin dashboard for managing questions
+- [x] Sound effects and animations
+- [x] Admin dashboard for managing questions
 - [ ] Category selection before game starts
-- [ ] Configurable scoring rules
-- [ ] Team chat/reactions
-- [ ] Export game results
+- [x] Configurable scoring rules
+- [x] Team chat/reactions
+- [x] Export game results
 
 ## 🤝 Contributing
 

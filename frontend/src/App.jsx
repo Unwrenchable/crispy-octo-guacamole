@@ -11,6 +11,7 @@ import ApplesHost from './pages/ApplesHost';
 import ApplesPlayer from './pages/ApplesPlayer';
 import PhoneLogin from './pages/PhoneLogin';
 import RewardsProfile from './pages/RewardsProfile';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/play/pictionary" element={<PictionaryPlayer />} />
         <Route path="/play/apples" element={<ApplesPlayer />} />
         <Route path="/stats" element={<PlayerStats />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
