@@ -4,12 +4,17 @@ const https = require('https');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    // Allow all origins so devices on the local network (phones, TVs) can connect
+    // in standalone mode.  Set CLIENT_URL in production to restrict this.
+    origin: process.env.CLIENT_URL || true,
     methods: ["GET", "POST"]
   }
 });
@@ -18,6 +23,25 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
+
+// Serve built frontend in standalone mode
+const distPath = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+}
+
+// Helper to get local LAN IP address
+function getLocalIP() {
+  const ifaces = os.networkInterfaces();
+  for (const name of Object.keys(ifaces)) {
+    for (const iface of ifaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
 
 // In-memory storage for games
 const games = new Map();
@@ -1639,7 +1663,27 @@ setInterval(() => {
   });
 }, 30 * 60 * 1000); // Every 30 minutes
 
-server.listen(PORT, () => {
+// Catch-all: serve frontend index.html for client-side routing.
+// This server has no REST API routes — all game logic goes through Socket.io —
+// so intercepting unmatched GET requests here is safe and intentional.
+if (fs.existsSync(distPath)) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
+server.listen(PORT, '0.0.0.0', () => {
+  const localIP = getLocalIP();
+  const isStandalone = fs.existsSync(distPath);
   console.log(`🎮 Bar Trivia Server running on port ${PORT}`);
-  console.log(`Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  if (isStandalone) {
+    console.log('');
+    console.log('📺 STANDALONE MODE — open any of these URLs in a browser:');
+    console.log(`   Local:   http://localhost:${PORT}`);
+    console.log(`   Network: http://${localIP}:${PORT}  ← use this for phones/TVs on the same WiFi`);
+    console.log('');
+    console.log('📱 Share the Network URL (or QR-code it) so players can join from their phones.');
+  } else {
+    console.log(`Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  }
 });

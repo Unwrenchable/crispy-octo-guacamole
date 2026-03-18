@@ -65,6 +65,38 @@ A real-time multiplayer game platform perfect for bar game nights, built with Re
 - Node.js 16+ installed
 - npm or yarn package manager
 
+### 🔌 Standalone / USB Mode (Recommended for bars and events)
+
+Run the entire app — frontend + backend — from a single server.  No separate dev server needed.  Works great on a laptop plugged into a bar TV, or from a USB drive.
+
+```bash
+# Linux / macOS
+chmod +x start-standalone.sh
+./start-standalone.sh
+
+# Windows — double-click start-standalone.bat, or run in Command Prompt:
+start-standalone.bat
+```
+
+The script will:
+1. Install all dependencies (only on first run)
+2. Build the frontend into optimized static files
+3. Start a single server on **port 3001** that serves everything
+
+At startup you'll see something like:
+
+```
+📺 STANDALONE MODE — open any of these URLs in a browser:
+   Local:   http://localhost:3001
+   Network: http://192.168.1.42:3001  ← use this for phones/TVs on the same WiFi
+```
+
+Share the **Network URL** (or show it as a QR code) so players can join from their phones.
+
+> **USB tip:** Copy the whole repository folder to a USB drive.  On any machine with Node.js, plug in the drive and run the start script — it will install/cache dependencies and start the server automatically.
+
+---
+
 ### Local Development
 
 1. **Clone the repository**
