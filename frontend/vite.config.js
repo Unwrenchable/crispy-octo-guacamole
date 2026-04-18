@@ -5,6 +5,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  server: {
+    host: true,  // Expose on all interfaces so phones/tablets on LAN can connect
+    port: 5173,
+  },
   plugins: [
     react(),
     VitePWA({
