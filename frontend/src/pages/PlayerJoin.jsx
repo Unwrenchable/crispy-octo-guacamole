@@ -7,16 +7,13 @@ function PlayerJoin() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [pin, setPin] = useState(searchParams.get('pin') || '');
-  const [teamName, setTeamName] = useState('');
+  const [teamName, setTeamName] = useState(() => storageService.getActiveProfile()?.displayName || '');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState(null);
+  const [profile] = useState(() => storageService.getActiveProfile());
 
   useEffect(() => {
     socketService.connect();
-    const p = storageService.getActiveProfile();
-    setProfile(p);
-    if (p && !teamName) setTeamName(p.displayName);
   }, []);
 
   const handleJoin = async () => {

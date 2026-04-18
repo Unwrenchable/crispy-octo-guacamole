@@ -10,7 +10,6 @@ function ApplesPlayer() {
 
   const [hand, setHand] = useState([]);
   const [greenCard, setGreenCard] = useState('');
-  const [judgeId, setJudgeId] = useState('');
   const [judgeName, setJudgeName] = useState('');
   const [round, setRound] = useState(0);
   const [isJudge, setIsJudge] = useState(false);
@@ -34,7 +33,6 @@ function ApplesPlayer() {
 
     socketService.onApplesRoundStart((data) => {
       setGreenCard(data.greenCard);
-      setJudgeId(data.judgeId);
       setJudgeName(data.judgeName);
       setRound(data.round);
       setIsJudge(data.judgeId === teamId);
@@ -88,7 +86,7 @@ function ApplesPlayer() {
       socketService.removeListener('apples:round-winner');
       socketService.removeListener('game:ended');
     };
-  }, [pin, teamId, teamName, isJudge, navigate]);
+  }, [pin, teamId, teamName, isJudge, navigate, playerPhone]);
 
   const handlePlayCard = (card) => {
     if (hasPlayed || isJudge) return;

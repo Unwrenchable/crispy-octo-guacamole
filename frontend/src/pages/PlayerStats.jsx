@@ -1,18 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import storageService from '../services/storage';
 
 function PlayerStats() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [achievements, setAchievements] = useState(null);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [stats, setStats] = useState(() => storageService.getPlayerStats());
+  const [history, setHistory] = useState(() => storageService.getPlayerHistory());
+  const [achievements, setAchievements] = useState(() => storageService.getAchievements());
+  const [leaderboard, setLeaderboard] = useState(() => storageService.getPersistentLeaderboard());
   const [activeTab, setActiveTab] = useState('stats'); // stats, history, achievements, leaderboard
-
-  useEffect(() => {
-    loadData();
-  }, []);
 
   const loadData = () => {
     setStats(storageService.getPlayerStats());

@@ -5,16 +5,13 @@ import socketService from '../services/socket';
 function ApplesHost() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, gameId, teams: initialTeams } = location.state || {};
+  const { pin } = location.state || {};
 
   const [greenCard, setGreenCard] = useState('');
   const [judgeName, setJudgeName] = useState('');
-  const [judgeId, setJudgeId] = useState('');
   const [round, setRound] = useState(0);
-  const [submissions, setSubmissions] = useState([]);
   const [submittedCount, setSubmittedCount] = useState(0);
   const [totalNeeded, setTotalNeeded] = useState(0);
-  const [allCardsIn, setAllCardsIn] = useState(false);
   const [roundWinner, setRoundWinner] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [gameEnded, setGameEnded] = useState(false);
@@ -27,12 +24,9 @@ function ApplesHost() {
     socketService.onApplesRoundStart((data) => {
       setGreenCard(data.greenCard);
       setJudgeName(data.judgeName);
-      setJudgeId(data.judgeId);
       setRound(data.round);
       setSubmittedCount(0);
-      setAllCardsIn(false);
       setRoundWinner(null);
-      setSubmissions([]);
       setPhase('playing');
     });
 
@@ -41,8 +35,7 @@ function ApplesHost() {
       setTotalNeeded(data.totalNeeded);
     });
 
-    socketService.onApplesAllCardsIn((data) => {
-      setAllCardsIn(true);
+    socketService.onApplesAllCardsIn(() => {
       setPhase('reveal');
     });
 

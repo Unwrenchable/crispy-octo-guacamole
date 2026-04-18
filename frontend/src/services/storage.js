@@ -212,7 +212,7 @@ class StorageService {
   }
 
   // Award points for a completed game - call after game ends
-  awardGamePoints(phone, { rank, totalTeams, score, gameMode, genre }) {
+  awardGamePoints(phone, { rank, totalTeams, gameMode, genre }) {
     if (!phone) return;
     const normalized = this.normalizePhone(phone);
     const profile = this.getProfile(normalized);

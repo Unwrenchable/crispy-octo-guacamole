@@ -125,7 +125,7 @@ function PictionaryPlayer() {
       socketService.removeListener('pictionary:correct-guess');
       socketService.removeListener('game:ended');
     };
-  }, [pin, teamId, teamName, isMyTurn, navigate]);
+  }, [pin, teamId, teamName, isMyTurn, navigate, playerPhone]);
 
   const getPos = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
