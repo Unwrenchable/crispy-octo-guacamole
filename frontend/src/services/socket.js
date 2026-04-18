@@ -2,11 +2,12 @@ import { io } from 'socket.io-client';
 
 // In standalone mode the frontend is served by the backend on the same host/port,
 // so we connect back to window.location.host.  In local dev (Vite on port 5173)
-// we fall back to the explicit env var or the default localhost:3001 backend.
+// we derive the backend URL from the current hostname so that phones/tablets on
+// LAN (accessing via the machine's IP rather than localhost) still reach the backend.
 const SOCKET_URL =
   import.meta.env.VITE_SOCKET_URL ||
   (import.meta.env.DEV
-    ? 'http://localhost:3001'
+    ? `${window.location.protocol}//${window.location.hostname}:3001`
     : typeof window !== 'undefined'
       ? `${window.location.protocol}//${window.location.host}`
       : 'http://localhost:3001');
