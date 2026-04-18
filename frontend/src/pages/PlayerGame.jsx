@@ -67,7 +67,6 @@ function PlayerGame() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [gameEnded, setGameEnded] = useState(false);
   const [myScore, setMyScore] = useState(0);
-  const [prevScore, setPrevScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [rewardsAwarded, setRewardsAwarded] = useState([]);
   const [timeLeft, setTimeLeft] = useState(null);
@@ -94,11 +93,12 @@ function PlayerGame() {
     timerRef.current = null;
 
     if (!currentQuestion || showResults) {
-      setTimeLeft(null);
+      setTimeout(() => setTimeLeft(null), 0);
       return;
     }
 
-    setTimeLeft(currentQuestion.timeLimit);
+    const limit = currentQuestion.timeLimit;
+    const initId = setTimeout(() => setTimeLeft(limit), 0);
     const id = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) { clearInterval(id); return 0; }
@@ -106,7 +106,7 @@ function PlayerGame() {
       });
     }, 1000);
     timerRef.current = id;
-    return () => clearInterval(id);
+    return () => { clearTimeout(initId); clearInterval(id); };
   }, [currentQuestion, showResults]);
 
   useEffect(() => {
@@ -133,7 +133,6 @@ function PlayerGame() {
       const myTeam = data.leaderboard.find(t => t.name === teamName);
       if (myTeam) {
         const newScore = myTeam.score;
-        setPrevScore(prevScoreRef.current);
         setMyScore(newScore);
         // Trigger score pulse if score changed
         if (newScore !== prevScoreRef.current) {
@@ -174,12 +173,13 @@ function PlayerGame() {
     // Emoji reactions
     socketService.onReaction((data) => {
       const id = Date.now() + Math.random();
-      setFloatingReactions(prev => [...prev, { ...data, id }]);
+      const left = `${20 + Math.random() * 60}%`;
+      setFloatingReactions(prev => [...prev, { ...data, id, left }]);
       setTimeout(() => setFloatingReactions(prev => prev.filter(r => r.id !== id)), 2200);
     });
 
     return () => { socket.disconnect(); };
-  }, [pin, teamId, teamName, gameMode, genre, questionsAnswered, navigate, playSound]);
+  }, [pin, teamId, teamName, gameMode, genre, questionsAnswered, navigate, playSound, playerPhone]);
 
   // Play sound on answer revealed
   useEffect(() => {
@@ -300,7 +300,7 @@ function PlayerGame() {
           <div
             key={r.id}
             className="absolute animate-float-up text-5xl"
-            style={{ left: `${20 + Math.random() * 60}%`, bottom: '120px' }}
+            style={{ left: r.left, bottom: '120px' }}
           >
             {r.emoji}
           </div>

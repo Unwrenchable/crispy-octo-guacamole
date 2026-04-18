@@ -19,8 +19,8 @@ function HostLobby() {
     imageUrl: ''
   });
   const [showAddQuestion, setShowAddQuestion] = useState(false);
-  const [gameMode, setGameMode] = useState('classic');
-  const [genre, setGenre] = useState('mixed');
+  const [gameMode] = useState(location.state?.gameMode || 'classic');
+  const [genre] = useState(location.state?.genre || 'mixed');
   const [questionsLoaded, setQuestionsLoaded] = useState(false);
   const [loadCount, setLoadCount] = useState(20);
   const [poolSize, setPoolSize] = useState(null);
@@ -33,18 +33,11 @@ function HostLobby() {
   });
 
   const hostName = location.state?.hostName || 'Host';
-  const passedGameMode = location.state?.gameMode || 'classic';
-  const passedGenre = location.state?.genre || 'mixed';
   const joinUrl = `${window.location.origin}/join?pin=${pin}`;
 
   const isPictionary = gameMode === 'pictionary';
   const isApples = gameMode === 'apples-to-apples';
   const isPartyGame = isPictionary || isApples;
-
-  useEffect(() => {
-    setGameMode(passedGameMode);
-    setGenre(passedGenre);
-  }, [passedGameMode, passedGenre]);
 
   useEffect(() => {
     const socket = socketService.connect();
@@ -65,6 +58,7 @@ function HostLobby() {
     });
 
     return () => { socket.disconnect(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hostName, gameMode, genre]);
 
   const handleLoadQuestions = () => {

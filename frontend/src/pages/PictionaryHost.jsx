@@ -5,14 +5,13 @@ import socketService from '../services/socket';
 function PictionaryHost() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, gameId, teams: initialTeams } = location.state || {};
+  const { pin } = location.state || {};
 
   const [currentDrawer, setCurrentDrawer] = useState(null);
   const [round, setRound] = useState(0);
   const [leaderboard, setLeaderboard] = useState([]);
   const [gameEnded, setGameEnded] = useState(false);
   const [correctGuessers, setCorrectGuessers] = useState([]);
-  const [teams, setTeams] = useState(initialTeams || []);
   const canvasRef = useRef(null);
 
   useEffect(() => {

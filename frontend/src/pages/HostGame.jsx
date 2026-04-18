@@ -90,7 +90,7 @@ function exportJSON(leaderboard, totalQuestions) {
 function HostGame() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { pin, gameId, teams: initialTeams, questions } = location.state || {};
+  const { pin, teams: initialTeams, questions } = location.state || {};
 
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
@@ -120,9 +120,10 @@ function HostGame() {
     if (existingId) clearInterval(existingId);
     timerRef.current = null;
 
-    if (!currentQuestion || showAnswer) { setTimeLeft(null); return; }
+    if (!currentQuestion || showAnswer) return;
 
-    setTimeLeft(currentQuestion.timeLimit);
+    const limit = currentQuestion.timeLimit;
+    const initId = setTimeout(() => setTimeLeft(limit), 0);
     const id = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) { clearInterval(id); return 0; }
@@ -130,7 +131,7 @@ function HostGame() {
       });
     }, 1000);
     timerRef.current = id;
-    return () => clearInterval(id);
+    return () => { clearTimeout(initId); clearInterval(id); };
   }, [currentQuestion, showAnswer]);
 
   useEffect(() => {

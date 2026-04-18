@@ -1,20 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import storageService, { getTier } from '../services/storage';
 
 function Home() {
   const navigate = useNavigate();
-  const [hostName, setHostName] = useState('');
+  const [hostName, setHostName] = useState(() => storageService.getActiveProfile()?.displayName || '');
   const [gameMode, setGameMode] = useState('classic');
   const [genre, setGenre] = useState('mixed');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    const p = storageService.getActiveProfile();
-    setProfile(p);
-    if (p) setHostName(p.displayName);
-  }, []);
+  const [profile] = useState(() => storageService.getActiveProfile());
 
   const gameModes = [
     { id: 'classic', name: 'Classic Trivia', icon: '🎯', description: 'Traditional quiz with timed questions' },

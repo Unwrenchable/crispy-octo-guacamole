@@ -4,19 +4,16 @@ import storageService, { REWARDS_CATALOG, REWARDS_TIERS, getTier, getNextTier } 
 
 function RewardsProfile() {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(() => storageService.getActiveProfile());
   const [activeTab, setActiveTab] = useState('rewards'); // rewards | history | redemptions
   const [redeemMsg, setRedeemMsg] = useState(null);
   const [redeemingId, setRedeemingId] = useState(null);
 
   useEffect(() => {
-    const p = storageService.getActiveProfile();
-    if (!p) {
+    if (!profile) {
       navigate('/login', { state: { returnTo: '/rewards' } });
-      return;
     }
-    setProfile(p);
-  }, [navigate]);
+  }, [profile, navigate]);
 
   const refresh = () => {
     const p = storageService.getActiveProfile();
